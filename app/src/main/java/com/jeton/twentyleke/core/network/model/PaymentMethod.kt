@@ -12,11 +12,11 @@ data class PaymentMethod(
 )
 
 enum class TypeCode(val value: String) {
-    Banknote("BANKNOTE"),
-    Unknown("UNKNOWN");
+    BANKNOTE("BANKNOTE"),
+    UNKNOWN("UNKNOWN");
 
     companion object {
-        fun fromValue(value: String) = values().associateBy(TypeCode::value)[value] ?: Unknown
+        fun fromValue(value: String) = values().associateBy(TypeCode::value)[value] ?: UNKNOWN
     }
 }
 

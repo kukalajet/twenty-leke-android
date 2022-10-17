@@ -14,11 +14,11 @@ data class Seller(
 )
 
 enum class IdType(val value: String) {
-    Nuis("NUID"),
-    Unknown("UNKNOWN");
+    NUIS("NUIS"),
+    UNKNOWN("UNKNOWN");
 
     companion object {
-        fun fromValue(value: String) = values().associateBy(IdType::value)[value] ?: Unknown
+         fun fromValue(value: String) = values().associateBy(IdType::value)[value] ?: UNKNOWN
     }
 }
 

@@ -1,13 +1,18 @@
 package com.jeton.twentyleke.core.network.service
 
-import com.jeton.twentyleke.core.network.model.FetchInvoiceRequest
 import com.jeton.twentyleke.core.network.model.Invoice
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
+import retrofit2.http.POST
 
 interface InvoiceCheckService {
 
-    @GET("verifyInvoice")
-    suspend fun fetchInvoice(@Body request: FetchInvoiceRequest): Response<Invoice>
+    @FormUrlEncoded
+    @POST("verifyInvoice")
+    suspend fun fetchInvoice(
+        @Field("iic") iic: String,
+        @Field("dateTimeCreated") dateTimeCreated: String,
+        @Field("tin") tin: String
+    ): Response<Invoice>
 }

@@ -6,7 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.tooling.preview.Preview
+import org.koin.androidx.compose.getViewModel
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,7 +22,10 @@ class MainActivity : AppCompatActivity() {
 @Preview
 @Composable
 fun Screen() {
+    val viewModel = getViewModel<MainViewModel>()
+    val invoice = viewModel.invoice.collectAsState()
+
     Column {
-        Text("Hello Compose!")
+        Text("${invoice.value}")
     }
 }

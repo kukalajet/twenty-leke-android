@@ -27,12 +27,12 @@ data class Invoice(
 )
 
 enum class InvoiceType(val value: String) {
-    Cash("CASH"),
-    Unknown("UNKNOWN");
+    CASH("CASH"),
+    UNKNOWN("UNKNOWN");
 
     companion object {
         fun fromValue(value: String) =
-            InvoiceType.values().associateBy(InvoiceType::value)[value] ?: Unknown
+            InvoiceType.values().associateBy(InvoiceType::value)[value] ?: UNKNOWN
     }
 }
 
