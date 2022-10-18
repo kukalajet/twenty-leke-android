@@ -8,6 +8,6 @@ fun TwentyLekeApp(
     content: @Composable() () -> Unit
 ) {
     TwentyLekeTheme {
-        content
+        content()
     }
 }
