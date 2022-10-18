@@ -6,7 +6,7 @@ import com.jeton.twentyleke.core.di.repositoryModule
 import com.jeton.twentyleke.core.di.viewModelModule
 import org.koin.core.context.startKoin
 
-class App : Application() {
+class TwentyLekeApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 

@@ -1,31 +1,21 @@
 package com.jeton.twentyleke
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.tooling.preview.Preview
-import org.koin.androidx.compose.getViewModel
+import androidx.core.view.WindowCompat
+import com.jeton.twentyleke.feature.TwentyLekeApp
+import com.jeton.twentyleke.feature.home.view.HomeScreen
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         setContent {
-            Screen()
+            TwentyLekeApp {
+                HomeScreen()
+            }
         }
-    }
-}
-
-@Preview
-@Composable
-fun Screen() {
-    val viewModel = getViewModel<MainViewModel>()
-    val invoice = viewModel.invoice.collectAsState()
-
-    Column {
-        Text("${invoice.value}")
     }
 }
