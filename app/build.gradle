@@ -67,4 +67,6 @@ dependencies {
     implementation 'io.insert-koin:koin-androidx-workmanager:3.2.2'
     implementation 'io.insert-koin:koin-androidx-navigation:3.2.2'
     implementation 'io.insert-koin:koin-androidx-compose:3.2.1'
+
+    implementation "androidx.compose.material3:material3:1.0.0-rc01"
 }
