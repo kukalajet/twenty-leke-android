@@ -16,10 +16,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Alignment
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    navigateToScan: () -> Unit
+) {
     Scaffold(floatingActionButtonPosition = FabPosition.Center, floatingActionButton = {
         FloatingActionButton(
-            onClick = { print("fab") },
+            onClick = { navigateToScan() },
             backgroundColor = MaterialTheme.colorScheme.primary,
         ) {
             Icon(
@@ -36,7 +38,7 @@ fun HomeScreen() {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text("content")
+            Text("HomeScreen")
         }
     }
 }
@@ -44,5 +46,5 @@ fun HomeScreen() {
 @Preview
 @Composable
 fun PreviewHomeScreen() {
-    HomeScreen()
+    HomeScreen(navigateToScan = { })
 }
