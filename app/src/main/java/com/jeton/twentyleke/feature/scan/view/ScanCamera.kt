@@ -28,51 +28,53 @@ fun ScanCamera() {
     var preview by remember { mutableStateOf<Preview?>(null) }
     val barcodeValue = remember { mutableStateOf("") }
 
-    AndroidView(factory = { viewContext ->
-        PreviewView(viewContext).apply {
-            scaleType = PreviewView.ScaleType.FILL_CENTER
-            layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
-            )
-            implementationMode = PreviewView.ImplementationMode.COMPATIBLE
-        }
-    }, modifier = Modifier
-        .fillMaxSize()
-        .padding(16.dp), update = { previewView ->
-        val cameraSelector =
-            CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build()
-        val cameraExecutor = Executors.newSingleThreadExecutor()
-        val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
+    AndroidView(
+        factory = { viewContext ->
+            PreviewView(viewContext).apply {
+                scaleType = PreviewView.ScaleType.FILL_CENTER
+                layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+                )
+                implementationMode = PreviewView.ImplementationMode.COMPATIBLE
+            }
+        },
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp), update = { previewView ->
+            val cameraSelector =
+                CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build()
+            val cameraExecutor = Executors.newSingleThreadExecutor()
+            val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
 
-        cameraProviderFuture.addListener({
-            preview = Preview.Builder().build()
-                .also { it.setSurfaceProvider(previewView.surfaceProvider) }
-            val cameraProvider = cameraProviderFuture.get()
-            val barCodeAnalyser = BarCodeAnalyser { barcodes ->
-                barcodes.forEach { barcode ->
-                    barcode.rawValue?.let { value ->
-                        barcodeValue.value = value
-                        Toast.makeText(context, value, Toast.LENGTH_SHORT).show()
+            cameraProviderFuture.addListener({
+                preview = Preview.Builder().build()
+                    .also { it.setSurfaceProvider(previewView.surfaceProvider) }
+                val cameraProvider = cameraProviderFuture.get()
+                val barCodeAnalyser = BarCodeAnalyser { barcodes ->
+                    barcodes.forEach { barcode ->
+                        barcode.rawValue?.let { value ->
+                            barcodeValue.value = value
+                            Toast.makeText(context, value, Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
-            }
-            val imageAnalysis = ImageAnalysis.Builder()
-                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                .build()
-                .also { it.setAnalyzer(cameraExecutor, barCodeAnalyser) }
+                val imageAnalysis = ImageAnalysis.Builder()
+                    .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                    .build()
+                    .also { it.setAnalyzer(cameraExecutor, barCodeAnalyser) }
 
-            try {
-                cameraProvider.unbindAll()
-                cameraProvider.bindToLifecycle(
-                    lifecycleOwner,
-                    cameraSelector,
-                    preview,
-                    imageAnalysis
-                )
-            } catch (e: Exception) {
-                Log.d("TAG", "CameraPreview: ${e.localizedMessage}")
-            }
+                try {
+                    cameraProvider.unbindAll()
+                    cameraProvider.bindToLifecycle(
+                        lifecycleOwner,
+                        cameraSelector,
+                        preview,
+                        imageAnalysis
+                    )
+                } catch (e: Exception) {
+                    Log.d("TAG", "CameraPreview: ${e.localizedMessage}")
+                }
 
-        }, ContextCompat.getMainExecutor(context))
-    })
+            }, ContextCompat.getMainExecutor(context))
+        })
 }
