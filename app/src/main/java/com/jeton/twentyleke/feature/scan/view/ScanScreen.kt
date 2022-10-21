@@ -5,10 +5,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -26,15 +25,11 @@ fun ScanScreen() {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
 
-            val cameraPermissionState =
-                rememberPermissionState(permission = Manifest.permission.CAMERA)
-
-            Button(
-                onClick = {
+            val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
+            LaunchedEffect(cameraPermissionState) {
+                if (!cameraPermissionState.hasPermission) {
                     cameraPermissionState.launchPermissionRequest()
                 }
-            ) {
-                Text(text = "Camera Permission")
             }
 
             ScanCamera()

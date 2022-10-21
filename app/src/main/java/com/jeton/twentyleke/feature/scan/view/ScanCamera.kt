@@ -39,8 +39,8 @@ fun ScanCamera() {
             }
         },
         modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp), update = { previewView ->
+            .fillMaxSize(),
+        update = { previewView ->
             val cameraSelector =
                 CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build()
             val cameraExecutor = Executors.newSingleThreadExecutor()
