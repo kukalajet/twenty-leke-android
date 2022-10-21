@@ -12,9 +12,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ScanningIndicator() {
+fun ScanningIndicator(
+    modifier: Modifier = Modifier
+) {
     Canvas(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .aspectRatio(1f)
             .padding(8.dp)
