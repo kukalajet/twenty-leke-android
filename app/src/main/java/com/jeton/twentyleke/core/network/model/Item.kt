@@ -3,7 +3,7 @@ package com.jeton.twentyleke.core.network.model
 import com.squareup.moshi.Json
 
 data class Item(
-    @Json(name = "id") val id: Long,
+    @Json(name = "id") val id: Long?,
     @Json(name = "name") val name: String?,
     @Json(name = "code") val code: String?,
     @Json(name = "unit") val unit: String?,
