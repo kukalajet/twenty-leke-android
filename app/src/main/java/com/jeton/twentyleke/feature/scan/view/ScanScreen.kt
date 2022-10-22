@@ -4,8 +4,6 @@ import android.Manifest
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -13,7 +11,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
@@ -67,51 +64,5 @@ fun ScanScreen() {
                 Text(text = scanResult.value.toString(), color = Color.Magenta)
             }
         }
-    }
-}
-
-@Composable
-fun FailedScanDialog(onDismissRequest: () -> Unit, onConfirmButtonClick: () -> Unit) {
-    AlertDialog(
-        onDismissRequest = onDismissRequest,
-        title = {
-            Text(
-                "Invalid QR code",
-                style = MaterialTheme.typography.headlineMedium,
-                color = MaterialTheme.colorScheme.onErrorContainer
-            )
-        },
-        text = {
-            Text(
-                "The scanned QR code is not valid, make sure it is coming from a exempt invoice and scan it again.",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onErrorContainer
-            )
-        },
-        icon = {
-            Icon(
-                Icons.Filled.Close,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onErrorContainer,
-            )
-        },
-        confirmButton = {
-            TextButton(onClick = onConfirmButtonClick) {
-                Text(
-                    "OK",
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.onErrorContainer
-                )
-            }
-        },
-        containerColor = MaterialTheme.colorScheme.errorContainer
-    )
-}
-
-@Preview
-@Composable
-fun PreviewFailedScanDialog() {
-    TwentyLekeTheme {
-        FailedScanDialog(onDismissRequest = { }, onConfirmButtonClick = { })
     }
 }
