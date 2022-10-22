@@ -19,7 +19,6 @@ fun ScanningIndicator(
         modifier = modifier
             .fillMaxWidth()
             .aspectRatio(1f)
-            .padding(8.dp)
     ) {
         val width = size.width
         val height = size.height

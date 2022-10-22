@@ -3,40 +3,115 @@ package com.jeton.twentyleke.feature.scan.view
 import android.Manifest
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
+import com.jeton.twentyleke.core.ui.theme.TwentyLekeTheme
+import com.jeton.twentyleke.feature.scan.viewmodel.ScanResult
+import com.jeton.twentyleke.feature.scan.viewmodel.ScanViewModel
+import org.koin.androidx.compose.getViewModel
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun ScanScreen() {
     val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
+    val viewModel = getViewModel<ScanViewModel>()
+    val scanResult = viewModel.scanResult.collectAsState()
 
     LaunchedEffect(cameraPermissionState) {
+        // wip
+        // viewModel.onScannedValue("https://efiskalizimi-app.tatime.gov.al/invoice-check/#/verify?iic=F623DA5EB6D83ED32238A2332513C276&tin=M21314013L&crtd=2022-07-19T11:21:58+02:00&ord=939&bu=jq972gs580&cr=ok253eq083&sw=vn690dp449&prc=2100.00")
+
         if (!cameraPermissionState.hasPermission) {
             cameraPermissionState.launchPermissionRequest()
         }
     }
 
-    Scaffold { innerPadding ->
-        Box(modifier = Modifier.fillMaxSize()) {
-            ScanCamera()
+    TwentyLekeTheme {
+        Scaffold { innerPadding ->
+            Box(modifier = Modifier.fillMaxSize()) {
+                ScanCamera(onScannedValue = { value ->
+                    viewModel.onScannedValue(value)
+                })
 
-            Column(
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                ScanningIndicator(
-                    modifier = Modifier.padding(32.dp)
-                )
+                when (scanResult.value) {
+                    is ScanResult.Failure -> {
+                        FailedScanDialog(onDismissRequest = { viewModel.reset() },
+                            onConfirmButtonClick = { viewModel.reset() })
+                    }
+                    else -> {
+                        Column(
+                            modifier = Modifier
+                                .padding(innerPadding)
+                                .fillMaxSize()
+                                .padding(40.dp),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                        ) {
+                            ScanningIndicator()
+                        }
+                    }
+                }
+
+                Text(text = scanResult.value.toString(), color = Color.Magenta)
             }
         }
+    }
+}
+
+@Composable
+fun FailedScanDialog(onDismissRequest: () -> Unit, onConfirmButtonClick: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismissRequest,
+        title = {
+            Text(
+                "Invalid QR code",
+                style = MaterialTheme.typography.headlineMedium,
+                color = MaterialTheme.colorScheme.onErrorContainer
+            )
+        },
+        text = {
+            Text(
+                "The scanned QR code is not valid, make sure it is coming from a exempt invoice and scan it again.",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onErrorContainer
+            )
+        },
+        icon = {
+            Icon(
+                Icons.Filled.Close,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onErrorContainer,
+            )
+        },
+        confirmButton = {
+            TextButton(onClick = onConfirmButtonClick) {
+                Text(
+                    "OK",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onErrorContainer
+                )
+            }
+        },
+        containerColor = MaterialTheme.colorScheme.errorContainer
+    )
+}
+
+@Preview
+@Composable
+fun PreviewFailedScanDialog() {
+    TwentyLekeTheme {
+        FailedScanDialog(onDismissRequest = { }, onConfirmButtonClick = { })
     }
 }

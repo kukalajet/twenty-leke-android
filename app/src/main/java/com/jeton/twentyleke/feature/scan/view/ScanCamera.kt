@@ -21,12 +21,13 @@ import com.jeton.twentyleke.feature.scan.BarCodeAnalyser
 import java.util.concurrent.Executors
 
 @Composable
-fun ScanCamera() {
+fun ScanCamera(
+    onScannedValue: (String) -> Unit,
+) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
     var preview by remember { mutableStateOf<Preview?>(null) }
-    val barcodeValue = remember { mutableStateOf("") }
 
     AndroidView(
         factory = { viewContext ->
@@ -53,8 +54,7 @@ fun ScanCamera() {
                 val barCodeAnalyser = BarCodeAnalyser { barcodes ->
                     barcodes.forEach { barcode ->
                         barcode.rawValue?.let { value ->
-                            barcodeValue.value = value
-                            Toast.makeText(context, value, Toast.LENGTH_SHORT).show()
+                            onScannedValue(value)
                         }
                     }
                 }
