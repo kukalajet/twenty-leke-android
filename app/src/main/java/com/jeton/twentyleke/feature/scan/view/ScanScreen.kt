@@ -28,7 +28,7 @@ fun ScanScreen() {
 
     LaunchedEffect(cameraPermissionState) {
         // wip
-        // viewModel.onScannedValue("https://efiskalizimi-app.tatime.gov.al/invoice-check/#/verify?iic=F623DA5EB6D83ED32238A2332513C276&tin=M21314013L&crtd=2022-07-19T11:21:58+02:00&ord=939&bu=jq972gs580&cr=ok253eq083&sw=vn690dp449&prc=2100.00")
+        viewModel.onScannedValue("https://efiskalizimi-app.tatime.gov.al/invoice-check/#/verify?iic=F623DA5EB6D83ED32238A2332513C276&tin=M21314013L&crtd=2022-07-19T11:21:58+02:00&ord=939&bu=jq972gs580&cr=ok253eq083&sw=vn690dp449&prc=2100.00")
 
         if (!cameraPermissionState.hasPermission) {
             cameraPermissionState.launchPermissionRequest()
@@ -47,21 +47,48 @@ fun ScanScreen() {
                         FailedScanDialog(onDismissRequest = { viewModel.reset() },
                             onConfirmButtonClick = { viewModel.reset() })
                     }
-                    else -> {
+                    is ScanResult.Loading -> {
+                        Column(
+                            modifier = Modifier
+                                .padding(innerPadding)
+                                .fillMaxSize(),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                        ) {
+                            CircularProgressIndicator(color = Color.White)
+                        }
+                    }
+                    is ScanResult.Initial -> {
                         Column(
                             modifier = Modifier
                                 .padding(innerPadding)
                                 .fillMaxSize()
-                                .padding(40.dp),
+                                .padding(56.dp),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally,
                         ) {
                             ScanningIndicator()
                         }
                     }
+                    is ScanResult.Success -> {}
                 }
 
-                Text(text = scanResult.value.toString(), color = Color.Magenta)
+                when (scanResult.value) {
+                    is ScanResult.Failure -> {
+                        val value = (scanResult.value as ScanResult.Failure).error
+                        Text(text = value, color = Color.Magenta)
+                    }
+                    is ScanResult.Initial -> {
+                        Text(text = "initial state", color = Color.Magenta)
+                    }
+                    is ScanResult.Loading -> {
+                        Text(text = "loading state", color = Color.Magenta)
+                    }
+                    is ScanResult.Success -> {
+                        val value = (scanResult.value as ScanResult.Success).data.toString()
+                        Text(text = value, color = Color.Magenta)
+                    }
+                }
             }
         }
     }
