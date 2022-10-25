@@ -9,6 +9,7 @@ import androidx.navigation.NavHostController
 object TwentyLekeDestinations {
     const val HOME_ROUTE = "home"
     const val SCAN_ROUTE = "scan"
+    const val DETAIL_ROUTE = "detail"
 }
 
 /**
@@ -29,6 +30,16 @@ class TwentyLekeNavigationActions(navController: NavHostController) {
 
     val navigateToScan: () -> Unit = {
         navController.navigate(TwentyLekeDestinations.SCAN_ROUTE) {
+            popUpTo(navController.graph.findStartDestination().id) {
+                saveState = true
+            }
+            launchSingleTop = true
+            restoreState = true
+        }
+    }
+
+    val navigateToDetail: () -> Unit = {
+        navController.navigate(TwentyLekeDestinations.DETAIL_ROUTE) {
             popUpTo(navController.graph.findStartDestination().id) {
                 saveState = true
             }

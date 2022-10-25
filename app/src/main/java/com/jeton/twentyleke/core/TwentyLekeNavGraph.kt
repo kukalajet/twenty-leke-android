@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.jeton.twentyleke.feature.detail.view.DetailRoute
 import com.jeton.twentyleke.feature.home.view.HomeRoute
 import com.jeton.twentyleke.feature.scan.view.ScanRoute
 
@@ -15,6 +16,7 @@ fun TwentyLekeNavGraph(
     navController: NavHostController = rememberNavController(),
     startDestination: String = TwentyLekeDestinations.HOME_ROUTE,
     navigateToScan: () -> Unit,
+    navigateToDetail: () -> Unit,
 ) {
     NavHost(
         navController = navController,
@@ -26,7 +28,11 @@ fun TwentyLekeNavGraph(
         }
 
         composable(TwentyLekeDestinations.SCAN_ROUTE) {
-            ScanRoute()
+            ScanRoute(navigateToDetail = navigateToDetail)
+        }
+
+        composable(TwentyLekeDestinations.DETAIL_ROUTE) {
+            DetailRoute()
         }
     }
 }

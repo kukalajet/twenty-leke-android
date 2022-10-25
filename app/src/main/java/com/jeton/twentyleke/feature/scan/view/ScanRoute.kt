@@ -3,6 +3,8 @@ package com.jeton.twentyleke.feature.scan.view
 import androidx.compose.runtime.Composable
 
 @Composable
-fun ScanRoute() {
-    ScanScreen()
+fun ScanRoute(
+    navigateToDetail: () -> Unit
+) {
+    ScanScreen(navigateToDetail = navigateToDetail)
 }

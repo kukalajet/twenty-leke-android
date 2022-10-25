@@ -21,7 +21,9 @@ import org.koin.androidx.compose.getViewModel
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun ScanScreen() {
+fun ScanScreen(
+    navigateToDetail: () -> Unit
+) {
     val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
     val viewModel = getViewModel<ScanViewModel>()
     val scanResult = viewModel.scanResult.collectAsState()
@@ -32,6 +34,12 @@ fun ScanScreen() {
 
         if (!cameraPermissionState.hasPermission) {
             cameraPermissionState.launchPermissionRequest()
+        }
+    }
+
+    LaunchedEffect(scanResult.value) {
+        if (scanResult.value is ScanResult.Success) {
+            navigateToDetail()
         }
     }
 
