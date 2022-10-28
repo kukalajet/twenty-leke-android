@@ -26,7 +26,7 @@ val appModule = module {
     single { provideOkHttpClient() }
     single { provideRetrofit(get<OkHttpClient>(), BASE_URL) }
     single { provideInvoiceCheckService(get<Retrofit>()) }
-    single<InvoiceCheckClient> { return@single InvoiceCheckClientImpl(get<InvoiceCheckService>()) }
+    single<InvoiceCheckClient> { provideInvoiceClientImpl(get<InvoiceCheckService>()) }
 }
 
 private fun provideOkHttpClient() = if (BuildConfig.DEBUG) {
@@ -52,6 +52,9 @@ private fun provideRetrofit(okHttpClient: OkHttpClient, baseUrl: String): Retrof
         .client(okHttpClient)
         .build()
 }
+
+private fun provideInvoiceClientImpl(invoiceCheckService: InvoiceCheckService): InvoiceCheckClientImpl =
+    InvoiceCheckClientImpl(invoiceCheckService)
 
 private fun provideInvoiceCheckService(retrofit: Retrofit): InvoiceCheckService =
     retrofit.create(InvoiceCheckService::class.java)

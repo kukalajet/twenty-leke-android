@@ -6,9 +6,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.jeton.twentyleke.core.repository.InvoiceCheckRepository
 import com.jeton.twentyleke.feature.detail.view.DetailRoute
 import com.jeton.twentyleke.feature.home.view.HomeRoute
 import com.jeton.twentyleke.feature.scan.view.ScanRoute
+import org.koin.androidx.compose.get
 
 @Composable
 fun TwentyLekeNavGraph(
@@ -32,7 +34,9 @@ fun TwentyLekeNavGraph(
         }
 
         composable(TwentyLekeDestinations.DETAIL_ROUTE) {
-            DetailRoute()
+            val invoiceCheckRepository = get<InvoiceCheckRepository>()
+            val cachedInvoice = invoiceCheckRepository.getCachedInvoice()
+            DetailRoute(invoice = cachedInvoice)
         }
     }
 }
