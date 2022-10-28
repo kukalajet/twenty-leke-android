@@ -1,9 +1,10 @@
 package com.jeton.twentyleke.core.repository
 
+import android.content.SharedPreferences
 import com.jeton.twentyleke.core.network.service.InvoiceCheckClient
 
 class InvoiceCheckRepository(
-    private val invoiceCheckClient: InvoiceCheckClient
+    sharedPreferences: SharedPreferences, private val invoiceCheckClient: InvoiceCheckClient
 ) {
 
     suspend fun getInvoice(

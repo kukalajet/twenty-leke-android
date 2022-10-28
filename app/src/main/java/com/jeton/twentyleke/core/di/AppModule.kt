@@ -1,5 +1,7 @@
 package com.jeton.twentyleke.core.di
 
+import android.content.Context
+import android.content.SharedPreferences
 import com.jeton.twentyleke.BuildConfig
 import com.jeton.twentyleke.core.network.model.IdTypeAdapter
 import com.jeton.twentyleke.core.network.model.InvoiceTypeAdapter
@@ -7,9 +9,11 @@ import com.jeton.twentyleke.core.network.model.TypeCodeAdapter
 import com.jeton.twentyleke.core.network.service.InvoiceCheckClient
 import com.jeton.twentyleke.core.network.service.InvoiceCheckClientImpl
 import com.jeton.twentyleke.core.network.service.InvoiceCheckService
+import com.jeton.twentyleke.core.util.SharedPreferencesUtils
 import com.squareup.moshi.Moshi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -18,6 +22,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 const val BASE_URL = "https://efiskalizimi-app.tatime.gov.al/invoice-check/api/"
 
 val appModule = module {
+    single { provideSharedPreferences(androidContext()) }
     single { provideOkHttpClient() }
     single { provideRetrofit(get<OkHttpClient>(), BASE_URL) }
     single { provideInvoiceCheckService(get<Retrofit>()) }
@@ -50,3 +55,7 @@ private fun provideRetrofit(okHttpClient: OkHttpClient, baseUrl: String): Retrof
 
 private fun provideInvoiceCheckService(retrofit: Retrofit): InvoiceCheckService =
     retrofit.create(InvoiceCheckService::class.java)
+
+private fun provideSharedPreferences(context: Context): SharedPreferences {
+    return SharedPreferencesUtils.defaultPreferences(context)
+}
