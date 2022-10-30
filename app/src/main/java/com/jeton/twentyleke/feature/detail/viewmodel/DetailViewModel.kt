@@ -6,5 +6,7 @@ import com.jeton.twentyleke.core.repository.InvoiceCheckRepository
 class DetailViewModel(
     private val invoiceCheckRepository: InvoiceCheckRepository
 ) : ViewModel() {
-
+    fun reset() {
+        invoiceCheckRepository.clearCachedInvoice()
+    }
 }

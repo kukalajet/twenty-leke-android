@@ -21,6 +21,7 @@ fun TwentyLekeApp() {
 
         TwentyLekeNavGraph(
             navController = navController,
+            navigateToHome = navigationActions.navigateToHome,
             navigateToScan = navigationActions.navigateToScan,
             navigateToDetail = navigationActions.navigateToDetail,
         )

@@ -5,7 +5,11 @@ import com.jeton.twentyleke.core.network.model.Invoice
 
 @Composable
 fun DetailRoute(
-    invoice: Invoice?
+    invoice: Invoice?,
+    navigateBackToHome: () -> Unit,
 ) {
-    DetailScreen(invoice = invoice)
+    DetailScreen(
+        invoice = invoice!!,
+        navigateBackToHome = navigateBackToHome
+    )
 }

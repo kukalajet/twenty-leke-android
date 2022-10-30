@@ -6,12 +6,17 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 import com.jeton.twentyleke.core.ui.theme.TwentyLekeTheme
@@ -22,15 +27,28 @@ import org.koin.androidx.compose.getViewModel
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun ScanScreen(
+    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     navigateToDetail: () -> Unit
 ) {
     val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
     val viewModel = getViewModel<ScanViewModel>()
     val scanResult = viewModel.scanResult.collectAsState()
 
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_DESTROY) {
+                viewModel.reset()
+            }
+        }
+
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
+
     LaunchedEffect(cameraPermissionState) {
-        // wip
-        viewModel.onScannedValue("https://efiskalizimi-app.tatime.gov.al/invoice-check/#/verify?iic=F623DA5EB6D83ED32238A2332513C276&tin=M21314013L&crtd=2022-07-19T11:21:58+02:00&ord=939&bu=jq972gs580&cr=ok253eq083&sw=vn690dp449&prc=2100.00")
+        // viewModel.onScannedValue("https://efiskalizimi-app.tatime.gov.al/invoice-check/#/verify?iic=F623DA5EB6D83ED32238A2332513C276&tin=M21314013L&crtd=2022-07-19T11:21:58+02:00&ord=939&bu=jq972gs580&cr=ok253eq083&sw=vn690dp449&prc=2100.00")
 
         if (!cameraPermissionState.hasPermission) {
             cameraPermissionState.launchPermissionRequest()

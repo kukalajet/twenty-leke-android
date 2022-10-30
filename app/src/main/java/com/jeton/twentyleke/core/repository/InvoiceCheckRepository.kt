@@ -36,9 +36,15 @@ class InvoiceCheckRepository(
 
     fun getCachedInvoice(): Invoice? {
         val json = sharedPreferences[CACHED_INVOICE_KEY, ""]
+        if (json.isEmpty()) return null
         val moshi = Moshi.Builder().build()
         val adapter = moshi.adapter(Invoice::class.java)
         return adapter.fromJson(json)
+    }
+
+    fun clearCachedInvoice(): Boolean {
+        val editor = sharedPreferences.edit()
+        return editor.remove(CACHED_INVOICE_KEY).commit()
     }
 
     companion object {

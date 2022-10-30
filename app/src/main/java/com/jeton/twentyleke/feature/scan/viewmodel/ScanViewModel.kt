@@ -17,6 +17,8 @@ class ScanViewModel(
         get() = _scanResult
 
     fun onScannedValue(url: String) {
+        if (_scanResult.value !is ScanResult.Initial) return
+
         val queryParameters = getQueryParameters(url)
 
         val isValid = queryParameters.isValid()
@@ -100,9 +102,6 @@ sealed class ScanResult {
 private data class Parameters(
     var iic: String?, var dateTimeCreated: String?, var tin: String?
 ) {
-    fun isValid(): Boolean {
-        val isValid =
-            iic?.isNotEmpty() == true && dateTimeCreated?.isNotEmpty() == true && tin?.isNotEmpty() == true
-        return isValid
-    }
+    fun isValid(): Boolean =
+        iic?.isNotEmpty() == true && dateTimeCreated?.isNotEmpty() == true && tin?.isNotEmpty() == true
 }

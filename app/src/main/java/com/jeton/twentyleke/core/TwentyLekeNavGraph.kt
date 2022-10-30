@@ -17,6 +17,7 @@ fun TwentyLekeNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     startDestination: String = TwentyLekeDestinations.HOME_ROUTE,
+    navigateToHome: () -> Unit,
     navigateToScan: () -> Unit,
     navigateToDetail: () -> Unit,
 ) {
@@ -34,9 +35,11 @@ fun TwentyLekeNavGraph(
         }
 
         composable(TwentyLekeDestinations.DETAIL_ROUTE) {
+            // Do you think I don't hate this implementation too?
+            // Take notes: https://stackoverflow.com/a/69060224
             val invoiceCheckRepository = get<InvoiceCheckRepository>()
             val cachedInvoice = invoiceCheckRepository.getCachedInvoice()
-            DetailRoute(invoice = cachedInvoice)
+            DetailRoute(invoice = cachedInvoice, navigateBackToHome = navigateToHome)
         }
     }
 }
