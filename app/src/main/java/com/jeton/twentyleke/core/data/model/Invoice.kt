@@ -1,8 +1,7 @@
 package com.jeton.twentyleke.core.data.model
 
-import com.squareup.moshi.FromJson
+import com.jeton.twentyleke.core.data.model.adapter.InvoiceType
 import com.squareup.moshi.Json
-import com.squareup.moshi.ToJson
 
 data class Invoice(
     @Json(name = "id") val id: Long?,
@@ -25,21 +24,3 @@ data class Invoice(
     @Json(name = "softwareCode") val softwareCode: String?,
     @Json(name = "iicSignature") val iicSignature: String?,
 )
-
-enum class InvoiceType(val value: String) {
-    CASH("CASH"),
-    UNKNOWN("UNKNOWN");
-
-    companion object {
-        fun fromValue(value: String?) =
-            values().associateBy(InvoiceType::value)[value] ?: UNKNOWN
-    }
-}
-
-class InvoiceTypeAdapter {
-    @ToJson
-    fun toJson(invoiceType: InvoiceType): String = invoiceType.value
-
-    @FromJson
-    fun fromJson(value: String?): InvoiceType = InvoiceType.fromValue(value ?: "UNKNOWN")
-}

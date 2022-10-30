@@ -3,9 +3,9 @@ package com.jeton.twentyleke.core.di
 import android.content.Context
 import android.content.SharedPreferences
 import com.jeton.twentyleke.BuildConfig
-import com.jeton.twentyleke.core.data.model.IdTypeAdapter
-import com.jeton.twentyleke.core.data.model.InvoiceTypeAdapter
-import com.jeton.twentyleke.core.data.model.TypeCodeAdapter
+import com.jeton.twentyleke.core.data.model.adapter.IdTypeAdapter
+import com.jeton.twentyleke.core.data.model.adapter.InvoiceTypeAdapter
+import com.jeton.twentyleke.core.data.model.adapter.TypeCodeAdapter
 import com.jeton.twentyleke.core.data.network.service.InvoiceCheckClient
 import com.jeton.twentyleke.core.data.network.service.InvoiceCheckClientImpl
 import com.jeton.twentyleke.core.data.network.service.InvoiceCheckService

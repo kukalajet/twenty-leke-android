@@ -1,8 +1,7 @@
 package com.jeton.twentyleke.core.data.model
 
-import com.squareup.moshi.FromJson
+import com.jeton.twentyleke.core.data.model.adapter.IdType
 import com.squareup.moshi.Json
-import com.squareup.moshi.ToJson
 
 data class Seller(
     @Json(name = "idType") val idType: IdType?,
@@ -12,20 +11,3 @@ data class Seller(
     @Json(name = "town") val town: String?,
     @Json(name = "country") val country: String?
 )
-
-enum class IdType(val value: String) {
-    NUIS("NUIS"),
-    UNKNOWN("UNKNOWN");
-
-    companion object {
-        fun fromValue(value: String?) = values().associateBy(IdType::value)[value] ?: UNKNOWN
-    }
-}
-
-class IdTypeAdapter {
-    @ToJson
-    fun toJson(typeCode: TypeCode): String = typeCode.value
-
-    @FromJson
-    fun fromJson(value: String?): TypeCode = TypeCode.fromValue(value ?: "UNKNOWN")
-}
