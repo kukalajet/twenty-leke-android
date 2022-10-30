@@ -2,7 +2,7 @@ package com.jeton.twentyleke
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.jeton.twentyleke.core.network.model.Invoice
+import com.jeton.twentyleke.core.data.model.Invoice
 import com.jeton.twentyleke.core.repository.InvoiceCheckRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

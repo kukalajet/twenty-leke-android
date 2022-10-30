@@ -1,5 +1,4 @@
-package com.jeton.twentyleke.core.network.service
-
+package com.jeton.twentyleke.core.data.network.service
 
 class InvoiceCheckClientImpl(
     private val invoiceCheckService: InvoiceCheckService

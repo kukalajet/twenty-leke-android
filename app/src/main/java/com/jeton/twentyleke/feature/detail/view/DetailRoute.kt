@@ -1,7 +1,7 @@
 package com.jeton.twentyleke.feature.detail.view
 
 import androidx.compose.runtime.Composable
-import com.jeton.twentyleke.core.network.model.Invoice
+import com.jeton.twentyleke.core.data.model.Invoice
 
 @Composable
 fun DetailRoute(
@@ -9,7 +9,7 @@ fun DetailRoute(
     navigateBackToHome: () -> Unit,
 ) {
     DetailScreen(
-        invoice = invoice!!,
+        invoice = invoice,
         navigateBackToHome = navigateBackToHome
     )
 }

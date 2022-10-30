@@ -1,8 +1,8 @@
 package com.jeton.twentyleke.core.repository
 
 import android.content.SharedPreferences
-import com.jeton.twentyleke.core.network.model.Invoice
-import com.jeton.twentyleke.core.network.service.InvoiceCheckClient
+import com.jeton.twentyleke.core.data.model.Invoice
+import com.jeton.twentyleke.core.data.network.service.InvoiceCheckClient
 import com.jeton.twentyleke.core.util.SharedPreferencesUtils.get
 import com.jeton.twentyleke.core.util.SharedPreferencesUtils.set
 import com.squareup.moshi.Moshi

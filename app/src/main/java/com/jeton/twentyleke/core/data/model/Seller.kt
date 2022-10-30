@@ -1,4 +1,4 @@
-package com.jeton.twentyleke.core.network.model
+package com.jeton.twentyleke.core.data.model
 
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.Json

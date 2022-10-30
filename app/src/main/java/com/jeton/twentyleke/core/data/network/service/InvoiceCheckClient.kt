@@ -1,6 +1,6 @@
-package com.jeton.twentyleke.core.network.service
+package com.jeton.twentyleke.core.data.network.service
 
-import com.jeton.twentyleke.core.network.model.Invoice
+import com.jeton.twentyleke.core.data.model.Invoice
 import retrofit2.Response
 
 interface InvoiceCheckClient {

@@ -4,12 +4,14 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import com.jeton.twentyleke.core.network.model.Invoice
+import com.jeton.twentyleke.core.data.model.Invoice
 import com.jeton.twentyleke.feature.detail.viewmodel.DetailViewModel
 import org.koin.androidx.compose.getViewModel
 
 @Composable
-fun DetailScreen(invoice: Invoice, navigateBackToHome: () -> Unit) {
+fun DetailScreen(invoice: Invoice?, navigateBackToHome: () -> Unit) {
+    if (invoice == null) return Box {}
+
     val viewModel = getViewModel<DetailViewModel>()
 
     BackHandler(enabled = true, onBack = {
