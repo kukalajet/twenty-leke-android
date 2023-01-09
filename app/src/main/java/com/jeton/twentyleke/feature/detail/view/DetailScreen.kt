@@ -33,10 +33,10 @@ fun DetailScreen(invoice: Invoice?, navigateBackToHome: () -> Unit) {
 
     val topBarTitleValue = remember(invoice) { "Faturë ${invoice.invoiceOrderNumber?.toInt()}" }
 
-    val viewModel = getViewModel<DetailViewModel>()
+//    val viewModel = getViewModel<DetailViewModel>()
 
     BackHandler(enabled = true, onBack = {
-        viewModel.reset()
+//        viewModel.reset()
         navigateBackToHome()
     })
 
