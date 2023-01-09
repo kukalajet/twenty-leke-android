@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import com.jeton.twentyleke.R
 import com.jeton.twentyleke.core.data.model.Invoice
 import com.jeton.twentyleke.core.data.model.Seller
-import com.jeton.twentyleke.core.ui.theme.TwentyLekeTheme
 import com.jeton.twentyleke.feature.detail.viewmodel.DetailViewModel
 import org.koin.androidx.compose.getViewModel
 import java.math.RoundingMode
@@ -41,37 +40,36 @@ fun DetailScreen(invoice: Invoice?, navigateBackToHome: () -> Unit) {
         navigateBackToHome()
     })
 
-    TwentyLekeTheme {
-        Scaffold(topBar = {
-            CenterAlignedTopAppBar(
-                colors = topAppBarColors(MaterialTheme.colorScheme.primaryContainer),
-                title = {
-                    Text(
-                        text = topBarTitleValue,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        style = MaterialTheme.typography.titleMedium
+    Scaffold(topBar = {
+        CenterAlignedTopAppBar(
+            colors = topAppBarColors(MaterialTheme.colorScheme.primaryContainer),
+            title = {
+                Text(
+                    text = topBarTitleValue,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            },
+            navigationIcon = {
+                IconButton(onClick = { navigateBackToHome() }) {
+                    Icon(
+                        Icons.Rounded.ArrowBack,
+                        contentDescription = "",
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer
                     )
-                },
-                navigationIcon = {
-                    IconButton(onClick = { navigateBackToHome() }) {
-                        Icon(
-                            Icons.Rounded.ArrowBack,
-                            contentDescription = "",
-                            tint = MaterialTheme.colorScheme.onBackground
-                        )
-                    }
-                },
-                modifier = Modifier.background(color = MaterialTheme.colorScheme.primaryContainer),
-            )
-        }) { innerPadding ->
-            Column(
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .background(colorResource(id = R.color.white))
-            ) {
-                HeaderSection(invoice = invoice)
-            }
+                }
+            },
+            modifier = Modifier.background(color = MaterialTheme.colorScheme.primaryContainer),
+        )
+    }) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+                .background(colorResource(id = R.color.white))
+        ) {
+            HeaderSection(invoice = invoice)
         }
     }
 }
@@ -126,7 +124,8 @@ fun TimeSection(dateTime: LocalDateTime) {
         text = formattedDate,
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
-        style = MaterialTheme.typography.titleMedium
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onPrimaryContainer
     )
 }
 
@@ -148,13 +147,25 @@ fun PriceSection(totalPrice: Double?, totalPriceWithoutVAT: Double?, totalVATAmo
 
     Column {
         if (totalPrice != null) Text(
-            text = formattedTotalPrice, maxLines = 1, overflow = TextOverflow.Ellipsis
+            text = formattedTotalPrice,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.onPrimaryContainer
         )
         if (totalPriceWithoutVAT != null) Text(
-            text = formattedTotalPriceWithoutVAT, maxLines = 1, overflow = TextOverflow.Ellipsis
+            text = formattedTotalPriceWithoutVAT,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onPrimaryContainer
         )
         if (totalVATAmount != null) Text(
-            text = formattedTotalVATAmount, maxLines = 1, overflow = TextOverflow.Ellipsis
+            text = formattedTotalVATAmount,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onPrimaryContainer
         )
     }
 }
@@ -177,8 +188,20 @@ fun SellerSection(seller: Seller) {
     }
 
     Column {
-        if (name != null) Text(text = name, maxLines = 1, overflow = TextOverflow.Ellipsis)
-        if (address != null) Text(text = address, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        if (name != null) Text(
+            text = name,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onPrimaryContainer
+        )
+        if (address != null) Text(
+            text = address,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onPrimaryContainer
+        )
     }
 }
 
@@ -197,7 +220,13 @@ fun InvoiceSignSection(invoiceOrderNumber: Double?, year: Int?, cashRegister: St
 
     Row {
         Spacer(Modifier.weight(1f))
-        Text(text = sign, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        Text(
+            text = sign,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onPrimaryContainer
+        )
     }
 }
 
