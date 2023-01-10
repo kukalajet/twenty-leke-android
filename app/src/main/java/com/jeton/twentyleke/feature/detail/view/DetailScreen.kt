@@ -3,6 +3,8 @@ package com.jeton.twentyleke.feature.detail.view
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -11,14 +13,14 @@ import androidx.compose.material3.*
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.jeton.twentyleke.R
 import com.jeton.twentyleke.core.data.model.Invoice
+import com.jeton.twentyleke.core.data.model.Item
 import com.jeton.twentyleke.core.data.model.Seller
 import com.jeton.twentyleke.feature.detail.viewmodel.DetailViewModel
 import org.koin.androidx.compose.getViewModel
@@ -33,10 +35,10 @@ fun DetailScreen(invoice: Invoice?, navigateBackToHome: () -> Unit) {
 
     val topBarTitleValue = remember(invoice) { "Faturë ${invoice.invoiceOrderNumber?.toInt()}" }
 
-//    val viewModel = getViewModel<DetailViewModel>()
+    val viewModel = getViewModel<DetailViewModel>()
 
     BackHandler(enabled = true, onBack = {
-//        viewModel.reset()
+        viewModel.reset()
         navigateBackToHome()
     })
 
@@ -63,13 +65,14 @@ fun DetailScreen(invoice: Invoice?, navigateBackToHome: () -> Unit) {
             },
             modifier = Modifier.background(color = MaterialTheme.colorScheme.primaryContainer),
         )
-    }) { innerPadding ->
+    }, containerColor = MaterialTheme.colorScheme.background) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
-                .background(colorResource(id = R.color.white))
+                .background(MaterialTheme.colorScheme.background)
         ) {
             HeaderSection(invoice = invoice)
+            InvoiceItems(invoiceItems = invoice.items!!)
         }
     }
 }
@@ -96,9 +99,9 @@ fun HeaderSection(invoice: Invoice) {
 
     Column(
         modifier = Modifier
-            .clip(shape = RoundedCornerShape(bottomStart = 16.dp))
+            .clip(shape = RoundedCornerShape(bottomStart = 24.dp))
             .background(color = MaterialTheme.colorScheme.primaryContainer)
-            .padding(horizontal = 8.dp, vertical = 8.dp)
+            .padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
     ) {
         if (dateTimeCreated != null) TimeSection(dateTimeCreated)
         PriceSection(totalPrice, totalPriceWithoutVAT, totalVATAmount)
@@ -230,9 +233,75 @@ fun InvoiceSignSection(invoiceOrderNumber: Double?, year: Int?, cashRegister: St
     }
 }
 
-@Preview(showSystemUi = true, showBackground = true)
 @Composable
-fun PreviewHomeScreen() {
+fun InvoiceItems(invoiceItems: List<Item>) {
+    LazyColumn(
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(all = 8.dp)
+    ) {
+        items(
+            items = invoiceItems,
+            itemContent = {
+                InvoiceItem(item = it)
+            }
+        )
+    }
+}
+
+@Composable
+fun InvoiceItem(item: Item) {
+    val name = remember(item) { item.name!! }
+    val quantity = remember(item) { item.quantity }
+    val priceAfterVat = remember(item) { item.priceAfterVat }
+
+    Row(
+        Modifier
+            .background(
+                MaterialTheme.colorScheme.secondaryContainer,
+                shape = RoundedCornerShape(8.dp)
+            )
+            .padding(PaddingValues(all = 8.dp))
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column {
+            Text(
+                text = name,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSecondaryContainer
+            )
+            Text(
+                text = "X $quantity",
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSecondaryContainer
+            )
+        }
+        Spacer(Modifier.weight(1f))
+        Text(
+            text = "$priceAfterVat Lekë",
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = MaterialTheme.typography.headlineSmall,
+            color = MaterialTheme.colorScheme.onSecondaryContainer
+        )
+    }
+}
+
+@Preview
+@Composable
+fun PreviewInvoiceItem() {
+    val invoice = Invoice.mock()
+    val item = invoice.items?.first()
+    InvoiceItem(item = item!!)
+}
+
+@Preview
+@Composable
+fun PreviewDetailScreen() {
     val invoice = Invoice.mock()
     DetailScreen(invoice = invoice, navigateBackToHome = { })
 }
