@@ -1,7 +1,7 @@
 package com.jeton.twentyleke.core.di
 
 import android.content.Context
-import android.content.SharedPreferences
+import androidx.room.Room
 import com.jeton.twentyleke.BuildConfig
 import com.jeton.twentyleke.core.data.model.adapter.IdTypeAdapter
 import com.jeton.twentyleke.core.data.model.adapter.InvoiceTypeAdapter
@@ -9,6 +9,7 @@ import com.jeton.twentyleke.core.data.model.adapter.TypeCodeAdapter
 import com.jeton.twentyleke.core.data.network.service.InvoiceCheckClient
 import com.jeton.twentyleke.core.data.network.service.InvoiceCheckClientImpl
 import com.jeton.twentyleke.core.data.network.service.InvoiceCheckService
+import com.jeton.twentyleke.core.data.persistance.TwentyLekeDatabase
 import com.jeton.twentyleke.core.util.SharedPreferencesUtils
 import com.squareup.moshi.Moshi
 import okhttp3.OkHttpClient
@@ -20,9 +21,11 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 
 // TODO: Move `BASE_URL` in `BuildConfig`
 const val BASE_URL = "https://efiskalizimi-app.tatime.gov.al/invoice-check/api/"
+const val DATABASE_NAME = "kuleta-db"
 
 val appModule = module {
     single { provideSharedPreferences(androidContext()) }
+    single { provideInvoiceDao(androidContext(), DATABASE_NAME) }
     single { provideOkHttpClient() }
     single { provideRetrofit(get<OkHttpClient>(), BASE_URL) }
     single { provideInvoiceCheckService(get<Retrofit>()) }
@@ -59,6 +62,10 @@ private fun provideInvoiceClientImpl(invoiceCheckService: InvoiceCheckService): 
 private fun provideInvoiceCheckService(retrofit: Retrofit): InvoiceCheckService =
     retrofit.create(InvoiceCheckService::class.java)
 
-private fun provideSharedPreferences(context: Context): SharedPreferences {
-    return SharedPreferencesUtils.defaultPreferences(context)
-}
+private fun provideSharedPreferences(context: Context) =
+    SharedPreferencesUtils.defaultPreferences(context)
+
+private fun provideInvoiceDao(context: Context, databaseName: String) =
+    Room.databaseBuilder(context, TwentyLekeDatabase::class.java, databaseName)
+        .build()
+        .invoiceDao()

@@ -1,6 +1,6 @@
 package com.jeton.twentyleke.core.data.network.service
 
-import com.jeton.twentyleke.core.data.model.Invoice
+import com.jeton.twentyleke.core.data.model.dto.InvoiceDTO
 import retrofit2.Response
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -14,5 +14,5 @@ interface InvoiceCheckService {
         @Field("iic") iic: String,
         @Field("dateTimeCreated") dateTimeCreated: String,
         @Field("tin") tin: String
-    ): Response<Invoice>
+    ): Response<InvoiceDTO>
 }

@@ -19,7 +19,7 @@ import androidx.compose.ui.Alignment
 fun HomeScreen(
     navigateToScan: () -> Unit
 ) {
-    Scaffold(floatingActionButtonPosition = FabPosition.Center, floatingActionButton = {
+    Scaffold(floatingActionButtonPosition = FabPosition.End, floatingActionButton = {
         FloatingActionButton(
             onClick = { navigateToScan() },
             backgroundColor = MaterialTheme.colorScheme.primary,

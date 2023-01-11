@@ -31,7 +31,8 @@ class MainViewModel(private val invoiceCheckRepository: InvoiceCheckRepository) 
 
         viewModelScope.launch {
             invoiceCheckRepository.getInvoice(iic, dateTimeCreated, tin).let { response ->
-                val invoice = response.body()
+                val dto = response.body()
+                val invoice = dto?.toInvoice()
                 _invoice.emit(invoice)
             }
         }

@@ -2,7 +2,9 @@ package com.jeton.twentyleke.core.repository
 
 import android.content.SharedPreferences
 import com.jeton.twentyleke.core.data.model.Invoice
+import com.jeton.twentyleke.core.data.model.dto.InvoiceDTO
 import com.jeton.twentyleke.core.data.network.service.InvoiceCheckClient
+import com.jeton.twentyleke.core.data.persistance.dao.InvoiceDao
 import com.jeton.twentyleke.core.util.SharedPreferencesUtils.get
 import com.jeton.twentyleke.core.util.SharedPreferencesUtils.set
 import com.squareup.moshi.Moshi
@@ -10,17 +12,23 @@ import retrofit2.Response
 
 class InvoiceCheckRepository(
     private val sharedPreferences: SharedPreferences,
-    private val invoiceCheckClient: InvoiceCheckClient
+    private val invoiceCheckClient: InvoiceCheckClient,
+    private val invoiceDao: InvoiceDao,
 ) {
+
+    init {
+        print(invoiceDao)
+    }
 
     suspend fun getInvoice(
         iic: String,
         dateTimeCreated: String,
         tin: String,
-    ): Response<Invoice> {
+    ): Response<InvoiceDTO> {
         val response = invoiceCheckClient.fetchInvoice(iic, dateTimeCreated, tin)
         if (response.isSuccessful) {
-            val invoice = response.body()
+            val dto = response.body()
+            val invoice = dto?.toInvoice()
             cacheInvoice(invoice)
         }
 

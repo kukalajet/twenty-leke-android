@@ -20,8 +20,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jeton.twentyleke.core.data.model.Invoice
-import com.jeton.twentyleke.core.data.model.Item
-import com.jeton.twentyleke.core.data.model.Seller
+import com.jeton.twentyleke.core.data.model.entity.ItemEntity
+import com.jeton.twentyleke.core.data.model.entity.SellerEntity
 import com.jeton.twentyleke.feature.detail.viewmodel.DetailViewModel
 import org.koin.androidx.compose.getViewModel
 import java.math.RoundingMode
@@ -33,7 +33,8 @@ import java.time.LocalDateTime
 fun DetailScreen(invoice: Invoice?, navigateBackToHome: () -> Unit) {
     if (invoice == null) return Box {}
 
-    val topBarTitleValue = remember(invoice) { "Faturë ${invoice.invoiceOrderNumber?.toInt()}" }
+    val topBarTitleValue =
+        remember(invoice) { "Faturë ${invoice.header.invoiceOrderNumber.toInt()}" }
 
     val viewModel = getViewModel<DetailViewModel>()
 
@@ -72,7 +73,7 @@ fun DetailScreen(invoice: Invoice?, navigateBackToHome: () -> Unit) {
                 .background(MaterialTheme.colorScheme.background)
         ) {
             HeaderSection(invoice = invoice)
-            InvoiceItems(invoiceItems = invoice.items!!)
+            InvoiceItems(invoiceItems = invoice.items)
         }
     }
 }
@@ -81,19 +82,19 @@ fun DetailScreen(invoice: Invoice?, navigateBackToHome: () -> Unit) {
 fun HeaderSection(invoice: Invoice) {
     val dateTimeCreated = remember(invoice) {
         try {
-            return@remember invoice.getLocalDateTimeCreated()
+            return@remember invoice.header.getLocalDateTimeCreated()
         } catch (e: Exception) {
             return@remember null
         }
     }
 
-    val totalPrice = invoice.totalPrice
-    val totalPriceWithoutVAT = invoice.totalPriceWithoutVAT
-    val totalVATAmount = invoice.totalVATAmount
+    val totalPrice = invoice.header.totalPrice
+    val totalPriceWithoutVAT = invoice.header.totalPriceWithoutVAT
+    val totalVATAmount = invoice.header.totalVATAmount
 
-    val invoiceOrderNumber = invoice.invoiceOrderNumber
+    val invoiceOrderNumber = invoice.header.invoiceOrderNumber
     val year = dateTimeCreated?.year
-    val cashRegister = invoice.cashRegister
+    val cashRegister = invoice.header.cashRegister
 
     val seller = invoice.seller
 
@@ -103,9 +104,9 @@ fun HeaderSection(invoice: Invoice) {
             .background(color = MaterialTheme.colorScheme.primaryContainer)
             .padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
     ) {
-        if (dateTimeCreated != null) TimeSection(dateTimeCreated)
+        dateTimeCreated?.let { TimeSection(it) }
         PriceSection(totalPrice, totalPriceWithoutVAT, totalVATAmount)
-        if (seller != null) SellerSection(seller)
+        SellerSection(seller)
         InvoiceSignSection(invoiceOrderNumber, year, cashRegister)
     }
 }
@@ -136,12 +137,14 @@ fun TimeSection(dateTime: LocalDateTime) {
 fun PriceSection(totalPrice: Double?, totalPriceWithoutVAT: Double?, totalVATAmount: Double?) {
     val formattedTotalPrice = remember(totalPrice) { "${totalPrice?.toInt()} Lekë" }
     val formattedTotalPriceWithoutVAT = remember(totalPriceWithoutVAT) {
+        if (totalPriceWithoutVAT == null) return@remember ""
         val df = DecimalFormat("#.##")
         df.roundingMode = RoundingMode.CEILING
         val formattedTotalPriceWithoutVAT = df.format(totalPriceWithoutVAT).toDouble()
         "Pa TVSH: $formattedTotalPriceWithoutVAT Lekë"
     }
     val formattedTotalVATAmount = remember(totalVATAmount) {
+        if (totalVATAmount == null) return@remember ""
         val df = DecimalFormat("#.##")
         df.roundingMode = RoundingMode.CEILING
         val formattedTotalVATAmount = df.format(totalVATAmount).toDouble()
@@ -174,7 +177,7 @@ fun PriceSection(totalPrice: Double?, totalPriceWithoutVAT: Double?, totalVATAmo
 }
 
 @Composable
-fun SellerSection(seller: Seller) {
+fun SellerSection(seller: SellerEntity) {
     val name = remember(seller) { seller.name }
     val address = remember(seller) {
         val address = seller.address
@@ -234,7 +237,7 @@ fun InvoiceSignSection(invoiceOrderNumber: Double?, year: Int?, cashRegister: St
 }
 
 @Composable
-fun InvoiceItems(invoiceItems: List<Item>) {
+fun InvoiceItems(invoiceItems: List<ItemEntity>) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(all = 8.dp)
@@ -249,8 +252,8 @@ fun InvoiceItems(invoiceItems: List<Item>) {
 }
 
 @Composable
-fun InvoiceItem(item: Item) {
-    val name = remember(item) { item.name!! }
+fun InvoiceItem(item: ItemEntity) {
+    val name = remember(item) { item.name }
     val quantity = remember(item) { item.quantity }
     val priceAfterVat = remember(item) { item.priceAfterVat }
 
@@ -273,7 +276,7 @@ fun InvoiceItem(item: Item) {
                 color = MaterialTheme.colorScheme.onSecondaryContainer
             )
             Text(
-                text = "X $quantity",
+                text = "x $quantity",
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.bodyMedium,
@@ -294,14 +297,14 @@ fun InvoiceItem(item: Item) {
 @Preview
 @Composable
 fun PreviewInvoiceItem() {
-    val invoice = Invoice.mock()
-    val item = invoice.items?.first()
-    InvoiceItem(item = item!!)
+    val invoice = Invoice.getMockedSample()
+    val item = invoice.items.first()
+    InvoiceItem(item = item)
 }
 
 @Preview
 @Composable
 fun PreviewDetailScreen() {
-    val invoice = Invoice.mock()
+    val invoice = Invoice.getMockedSample()
     DetailScreen(invoice = invoice, navigateBackToHome = { })
 }

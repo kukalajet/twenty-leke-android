@@ -37,7 +37,8 @@ class ScanViewModel(
                 queryParameters.tin!!
             ).let { response ->
                 if (response.isSuccessful) {
-                    val invoice = response.body()
+                    val dto = response.body()
+                    val invoice = dto?.toInvoice()
                     _scanResult.emit(ScanResult.Success(invoice!!))
                 } else {
                     val errorBody = response.errorBody().toString()
