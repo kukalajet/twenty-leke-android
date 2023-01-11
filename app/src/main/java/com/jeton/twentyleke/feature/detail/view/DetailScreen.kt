@@ -34,7 +34,7 @@ fun DetailScreen(invoice: Invoice?, navigateBackToHome: () -> Unit) {
     if (invoice == null) return Box {}
 
     val topBarTitleValue =
-        remember(invoice) { "Faturë ${invoice.header.invoiceOrderNumber.toInt()}" }
+        remember(invoice) { "Faturë ${invoice.header?.invoiceOrderNumber?.toInt()}" }
 
     val viewModel = getViewModel<DetailViewModel>()
 
@@ -73,7 +73,7 @@ fun DetailScreen(invoice: Invoice?, navigateBackToHome: () -> Unit) {
                 .background(MaterialTheme.colorScheme.background)
         ) {
             HeaderSection(invoice = invoice)
-            InvoiceItems(invoiceItems = invoice.items)
+            if (invoice.items != null) InvoiceItems(invoiceItems = invoice.items)
         }
     }
 }
@@ -82,19 +82,19 @@ fun DetailScreen(invoice: Invoice?, navigateBackToHome: () -> Unit) {
 fun HeaderSection(invoice: Invoice) {
     val dateTimeCreated = remember(invoice) {
         try {
-            return@remember invoice.header.getLocalDateTimeCreated()
+            return@remember invoice.header?.getLocalDateTimeCreated()
         } catch (e: Exception) {
             return@remember null
         }
     }
 
-    val totalPrice = invoice.header.totalPrice
-    val totalPriceWithoutVAT = invoice.header.totalPriceWithoutVAT
-    val totalVATAmount = invoice.header.totalVATAmount
+    val totalPrice = invoice.header?.totalPrice
+    val totalPriceWithoutVAT = invoice.header?.totalPriceWithoutVAT
+    val totalVATAmount = invoice.header?.totalVATAmount
 
-    val invoiceOrderNumber = invoice.header.invoiceOrderNumber
+    val invoiceOrderNumber = invoice.header?.invoiceOrderNumber
     val year = dateTimeCreated?.year
-    val cashRegister = invoice.header.cashRegister
+    val cashRegister = invoice.header?.cashRegister
 
     val seller = invoice.seller
 
@@ -106,7 +106,7 @@ fun HeaderSection(invoice: Invoice) {
     ) {
         dateTimeCreated?.let { TimeSection(it) }
         PriceSection(totalPrice, totalPriceWithoutVAT, totalVATAmount)
-        SellerSection(seller)
+        seller?.let { SellerSection(seller) }
         InvoiceSignSection(invoiceOrderNumber, year, cashRegister)
     }
 }
@@ -268,13 +268,15 @@ fun InvoiceItem(item: ItemEntity) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(modifier = Modifier.weight(2f)) {
-            Text(
-                text = name,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSecondaryContainer
-            )
+            name?.let {
+                Text(
+                    text = name,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer
+                )
+            }
             Text(
                 text = "x $quantity",
                 maxLines = 1,
@@ -298,8 +300,8 @@ fun InvoiceItem(item: ItemEntity) {
 @Composable
 fun PreviewInvoiceItem() {
     val invoice = Invoice.getMockedSample()
-    val item = invoice.items.first()
-    InvoiceItem(item = item)
+    val item = invoice.items?.first()
+    InvoiceItem(item = item!!)
 }
 
 @Preview

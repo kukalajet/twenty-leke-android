@@ -9,9 +9,9 @@ import com.squareup.moshi.Json
 data class PaymentMethodEntity(
     @PrimaryKey(autoGenerate = true) var paymentMethodId: Int = 0,
     @Json(name = "by") val by: Long?,
-    @Json(name = "type") val type: String,
-    @Json(name = "amount") val amount: Int,
-    @Json(name = "typeCode") val typeCode: TypeCode
+    @Json(name = "type") val type: String?,
+    @Json(name = "amount") val amount: Int?,
+    @Json(name = "typeCode") val typeCode: TypeCode?
 ) {
     companion object {
         fun getMockedSamples(): List<PaymentMethodEntity> {

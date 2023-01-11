@@ -8,13 +8,13 @@ import com.jeton.twentyleke.core.data.model.entity.PaymentMethodEntity
 import com.jeton.twentyleke.core.data.model.entity.SellerEntity
 
 data class Invoice(
-    @Embedded val header: HeaderEntity,
+    @Embedded val header: HeaderEntity?,
     @Relation(parentColumn = "headerId", entityColumn = "sellerId")
-    val seller: SellerEntity,
+    val seller: SellerEntity?,
     @Relation(parentColumn = "headerId", entityColumn = "itemId")
-    val items: List<ItemEntity>,
+    val items: List<ItemEntity>?,
     @Relation(parentColumn = "headerId", entityColumn = "paymentMethodId")
-    val paymentMethods: List<PaymentMethodEntity>
+    val paymentMethods: List<PaymentMethodEntity>?
 ) {
     companion object {
         fun getMockedSample(): Invoice {
