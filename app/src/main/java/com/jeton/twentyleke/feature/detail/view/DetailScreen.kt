@@ -267,7 +267,7 @@ fun InvoiceItem(item: ItemEntity) {
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Column {
+        Column(modifier = Modifier.weight(2f)) {
             Text(
                 text = name,
                 maxLines = 1,
@@ -283,13 +283,13 @@ fun InvoiceItem(item: ItemEntity) {
                 color = MaterialTheme.colorScheme.onSecondaryContainer
             )
         }
-        Spacer(Modifier.weight(1f))
         Text(
             text = "$priceAfterVat Lekë",
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.headlineSmall,
-            color = MaterialTheme.colorScheme.onSecondaryContainer
+            color = MaterialTheme.colorScheme.onSecondaryContainer,
+            modifier = Modifier.padding(PaddingValues(start = 4.dp))
         )
     }
 }
