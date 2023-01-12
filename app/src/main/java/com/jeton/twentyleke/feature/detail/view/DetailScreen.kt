@@ -4,7 +4,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
@@ -28,8 +28,6 @@ import com.jeton.twentyleke.core.data.model.Invoice
 import com.jeton.twentyleke.core.data.model.entity.ItemEntity
 import com.jeton.twentyleke.core.data.model.entity.SellerEntity
 import com.jeton.twentyleke.core.ui.theme.TwentyLekeTheme
-import com.jeton.twentyleke.feature.detail.viewmodel.DetailViewModel
-import org.koin.androidx.compose.getViewModel
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.time.LocalDateTime
@@ -44,10 +42,10 @@ fun DetailScreen(invoice: Invoice?, navigateBackToHome: () -> Unit) {
         "Faturë ${invoice.header?.invoiceOrderNumber?.toInt()}"
     }
 
-    val viewModel = getViewModel<DetailViewModel>()
+//    val viewModel = getViewModel<DetailViewModel>()
 
     BackHandler(enabled = true, onBack = {
-        viewModel.reset()
+//        viewModel.reset()
         navigateBackToHome()
     })
 
@@ -139,11 +137,12 @@ fun DetailScreen(invoice: Invoice?, navigateBackToHome: () -> Unit) {
                         .height(4.dp)
                 )
             }
-            items(
-                items = invoiceItems!!,
-                itemContent = { InvoiceItem(item = it) }
-            )
-            item { Spacer(modifier = Modifier.padding(48.dp)) }
+            itemsIndexed(items = invoiceItems!!) { index, item ->
+                InvoiceItem(item = item)
+                if (index < invoiceItems.lastIndex)
+                    InvoiceItemDivider()
+            }
+            item { Spacer(modifier = Modifier.padding(40.dp)) }
         }
     }
 }
@@ -312,45 +311,46 @@ fun InvoiceItem(item: ItemEntity) {
     val quantity = remember(item) { item.quantity }
     val priceAfterVat = remember(item) { item.priceAfterVat }
 
-    Card(Modifier.padding(vertical = 4.dp, horizontal = 8.dp)) {
-        Row(
-            Modifier
-                .background(
-                    MaterialTheme.colorScheme.secondaryContainer,
-                    shape = RoundedCornerShape(16.dp)
-                )
-                .padding(PaddingValues(horizontal = 12.dp, vertical = 8.dp))
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column(modifier = Modifier.weight(2f)) {
-                name?.let {
-                    Text(
-                        text = name,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.onSecondaryContainer
-                    )
-                }
+    Row(
+        Modifier.padding(PaddingValues(start = 16.dp, end = 24.dp, top = 16.dp, bottom = 16.dp)),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Column(modifier = Modifier.weight(2f)) {
+            name?.let {
                 Text(
-                    text = "x $quantity",
+                    text = name,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSecondaryContainer
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
             Text(
-                text = "$priceAfterVat Lekë",
+                text = "x $quantity",
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onSecondaryContainer,
-                modifier = Modifier.padding(PaddingValues(start = 4.dp))
+                style = MaterialTheme.typography.titleSmall,
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
+        Text(
+            text = "$priceAfterVat Lekë",
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.padding(PaddingValues(start = 8.dp))
+        )
     }
+}
+
+@Composable
+fun InvoiceItemDivider() {
+    Divider(
+        thickness = 1.dp,
+        color = MaterialTheme.colorScheme.outlineVariant,
+        modifier = Modifier.padding(horizontal = 16.dp)
+    )
 }
 
 @Preview
