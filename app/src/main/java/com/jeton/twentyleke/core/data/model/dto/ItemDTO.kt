@@ -4,7 +4,7 @@ import com.jeton.twentyleke.core.data.model.entity.ItemEntity
 import com.squareup.moshi.Json
 
 data class ItemDTO(
-    @Json(name = "id") val id: Long,
+    @Json(name = "id") val id: Long?,
     @Json(name = "name") val name: String?,
     @Json(name = "code") val code: String?,
     @Json(name = "unit") val unit: String?,

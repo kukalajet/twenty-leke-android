@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 
 @Entity(tableName = "Header")
 data class HeaderEntity(
-    @Json(name = "id") @PrimaryKey val headerId: Long,
+    @Json(name = "id") @PrimaryKey val headerId: Long?,
     @Json(name = "iic") val iic: String?,
     @Json(name = "totalPrice") val totalPrice: Double?,
     @Json(name = "invoiceOrderNumber") val invoiceOrderNumber: Double?,

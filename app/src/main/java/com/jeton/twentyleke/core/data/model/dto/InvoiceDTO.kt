@@ -8,7 +8,7 @@ import com.jeton.twentyleke.core.data.model.entity.PaymentMethodEntity
 import com.squareup.moshi.Json
 
 data class InvoiceDTO(
-    @Json(name = "id") val id: Long,
+    @Json(name = "id") val id: Long?,
     @Json(name = "iic") val iic: String?,
     @Json(name = "totalPrice") val totalPrice: Double?,
     @Json(name = "invoiceOrderNumber") val invoiceOrderNumber: Double?,

@@ -16,6 +16,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,8 +38,10 @@ import java.time.LocalDateTime
 fun DetailScreen(invoice: Invoice?, navigateBackToHome: () -> Unit) {
     if (invoice == null) return Box {}
 
-    val topBarTitleValue =
-        remember(invoice) { "Faturë ${invoice.header?.invoiceOrderNumber?.toInt()}" }
+    val invoiceItems = remember(invoice) { invoice.items }
+    val topBarTitleValue = remember(invoice) {
+        "Faturë ${invoice.header?.invoiceOrderNumber?.toInt()}"
+    }
 
     val viewModel = getViewModel<DetailViewModel>()
 
@@ -67,13 +74,44 @@ fun DetailScreen(invoice: Invoice?, navigateBackToHome: () -> Unit) {
             modifier = Modifier.background(color = MaterialTheme.colorScheme.primaryContainer),
         )
     }, containerColor = MaterialTheme.colorScheme.background) { innerPadding ->
-        Column(
+        LazyColumn(
             modifier = Modifier
+                .fillMaxSize()
                 .padding(innerPadding)
                 .background(MaterialTheme.colorScheme.background)
+                // https://stackoverflow.com/a/68738725
+                .graphicsLayer { alpha = 0.99F }
+                .drawWithContent {
+                    val colors = listOf(
+                        Color.Transparent,
+                        Color.Transparent,
+                        Color.Transparent,
+                        Color.Transparent,
+                        Color.Transparent,
+                        Color.Transparent,
+                        Color.Transparent,
+                        Color.Black
+                    )
+                    drawContent()
+                    drawRect(
+                        brush = Brush.verticalGradient(colors),
+                        blendMode = BlendMode.DstOut
+                    )
+                }
         ) {
-            HeaderSection(invoice = invoice)
-            if (invoice.items != null) InvoiceItems(invoiceItems = invoice.items)
+            item {
+                HeaderSection(invoice = invoice)
+                Box(
+                    Modifier
+                        .fillMaxWidth(1f)
+                        .height(4.dp)
+                )
+            }
+            items(
+                items = invoiceItems!!,
+                itemContent = { InvoiceItem(item = it) }
+            )
+            item { Spacer(modifier = Modifier.padding(100.dp)) }
         }
     }
 }
@@ -237,62 +275,49 @@ fun InvoiceSignSection(invoiceOrderNumber: Double?, year: Int?, cashRegister: St
 }
 
 @Composable
-fun InvoiceItems(invoiceItems: List<ItemEntity>) {
-    LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        contentPadding = PaddingValues(all = 8.dp)
-    ) {
-        items(
-            items = invoiceItems,
-            itemContent = {
-                InvoiceItem(item = it)
-            }
-        )
-    }
-}
-
-@Composable
 fun InvoiceItem(item: ItemEntity) {
     val name = remember(item) { item.name }
     val quantity = remember(item) { item.quantity }
     val priceAfterVat = remember(item) { item.priceAfterVat }
 
-    Row(
-        Modifier
-            .background(
-                MaterialTheme.colorScheme.secondaryContainer,
-                shape = RoundedCornerShape(8.dp)
-            )
-            .padding(PaddingValues(all = 8.dp))
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Column(modifier = Modifier.weight(2f)) {
-            name?.let {
+    Box(Modifier.padding(vertical = 4.dp, horizontal = 8.dp)) {
+        Row(
+            Modifier
+                .background(
+                    MaterialTheme.colorScheme.secondaryContainer,
+                    shape = RoundedCornerShape(4.dp)
+                )
+                .padding(PaddingValues(all = 8.dp))
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(modifier = Modifier.weight(2f)) {
+                name?.let {
+                    Text(
+                        text = name,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                    )
+                }
                 Text(
-                    text = name,
+                    text = "x $quantity",
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSecondaryContainer
                 )
             }
             Text(
-                text = "x $quantity",
+                text = "$priceAfterVat Lekë",
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSecondaryContainer
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                modifier = Modifier.padding(PaddingValues(start = 4.dp))
             )
         }
-        Text(
-            text = "$priceAfterVat Lekë",
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.headlineSmall,
-            color = MaterialTheme.colorScheme.onSecondaryContainer,
-            modifier = Modifier.padding(PaddingValues(start = 4.dp))
-        )
     }
 }
 
@@ -304,9 +329,9 @@ fun PreviewInvoiceItem() {
     InvoiceItem(item = item!!)
 }
 
-@Preview
-@Composable
-fun PreviewDetailScreen() {
-    val invoice = Invoice.getMockedSample()
-    DetailScreen(invoice = invoice, navigateBackToHome = { })
-}
+//@Preview
+//@Composable
+//fun PreviewDetailScreen() {
+//    val invoice = Invoice.getMockedSample()
+//    DetailScreen(invoice = invoice, navigateBackToHome = { })
+//}
