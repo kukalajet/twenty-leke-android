@@ -6,8 +6,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
@@ -50,30 +50,63 @@ fun DetailScreen(invoice: Invoice?, navigateBackToHome: () -> Unit) {
         navigateBackToHome()
     })
 
-    Scaffold(topBar = {
-        CenterAlignedTopAppBar(
-            colors = topAppBarColors(MaterialTheme.colorScheme.primaryContainer),
-            title = {
-                Text(
-                    text = topBarTitleValue,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer
-                )
-            },
-            navigationIcon = {
-                IconButton(onClick = { navigateBackToHome() }) {
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        topBar = {
+            CenterAlignedTopAppBar(
+                colors = topAppBarColors(MaterialTheme.colorScheme.primaryContainer),
+                title = {
+                    Text(
+                        text = topBarTitleValue,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = { navigateBackToHome() }) {
+                        Icon(
+                            Icons.Rounded.ArrowBack,
+                            contentDescription = "",
+                            tint = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                    }
+                },
+                modifier = Modifier.background(color = MaterialTheme.colorScheme.primaryContainer),
+            )
+        },
+        floatingActionButtonPosition = FabPosition.Center,
+        floatingActionButton = {
+            ExtendedFloatingActionButton(
+                modifier = Modifier.padding(horizontal = 40.dp),
+                onClick = { },
+                shape = FloatingActionButtonDefaults.extendedFabShape,
+                containerColor = MaterialTheme.colorScheme.primary,
+            )
+            {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Icon(
-                        Icons.Rounded.ArrowBack,
-                        contentDescription = "",
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer
+                        Icons.Filled.Done,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimary,
+                        modifier = Modifier.padding(end = 4.dp)
+                    )
+                    Text(
+                        text = "Add new invoice",
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onPrimary,
                     )
                 }
-            },
-            modifier = Modifier.background(color = MaterialTheme.colorScheme.primaryContainer),
-        )
-    }, containerColor = MaterialTheme.colorScheme.background) { innerPadding ->
+            }
+        },
+    ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -83,7 +116,6 @@ fun DetailScreen(invoice: Invoice?, navigateBackToHome: () -> Unit) {
                 .graphicsLayer { alpha = 0.99F }
                 .drawWithContent {
                     val colors = listOf(
-                        Color.Transparent,
                         Color.Transparent,
                         Color.Transparent,
                         Color.Transparent,
@@ -111,7 +143,7 @@ fun DetailScreen(invoice: Invoice?, navigateBackToHome: () -> Unit) {
                 items = invoiceItems!!,
                 itemContent = { InvoiceItem(item = it) }
             )
-            item { Spacer(modifier = Modifier.padding(100.dp)) }
+            item { Spacer(modifier = Modifier.padding(48.dp)) }
         }
     }
 }
@@ -329,9 +361,9 @@ fun PreviewInvoiceItem() {
     InvoiceItem(item = item!!)
 }
 
-//@Preview
-//@Composable
-//fun PreviewDetailScreen() {
-//    val invoice = Invoice.getMockedSample()
-//    DetailScreen(invoice = invoice, navigateBackToHome = { })
-//}
+@Preview
+@Composable
+fun PreviewDetailScreen() {
+    val invoice = Invoice.getMockedSample()
+    DetailScreen(invoice = invoice, navigateBackToHome = { })
+}
