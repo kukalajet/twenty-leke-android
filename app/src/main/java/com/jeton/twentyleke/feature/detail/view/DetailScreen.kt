@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import com.jeton.twentyleke.core.data.model.Invoice
 import com.jeton.twentyleke.core.data.model.entity.ItemEntity
 import com.jeton.twentyleke.core.data.model.entity.SellerEntity
+import com.jeton.twentyleke.core.ui.theme.TwentyLekeTheme
 import com.jeton.twentyleke.feature.detail.viewmodel.DetailViewModel
 import org.koin.androidx.compose.getViewModel
 import java.math.RoundingMode
@@ -121,7 +122,6 @@ fun DetailScreen(invoice: Invoice?, navigateBackToHome: () -> Unit) {
                         Color.Transparent,
                         Color.Transparent,
                         Color.Transparent,
-                        Color.Transparent,
                         Color.Black
                     )
                     drawContent()
@@ -172,7 +172,7 @@ fun HeaderSection(invoice: Invoice) {
         modifier = Modifier
             .clip(shape = RoundedCornerShape(bottomStart = 24.dp))
             .background(color = MaterialTheme.colorScheme.primaryContainer)
-            .padding(start = 8.dp, end = 8.dp, bottom = 8.dp)
+            .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
     ) {
         dateTimeCreated?.let { TimeSection(it) }
         PriceSection(totalPrice, totalPriceWithoutVAT, totalVATAmount)
@@ -294,7 +294,7 @@ fun InvoiceSignSection(invoiceOrderNumber: Double?, year: Int?, cashRegister: St
         value
     } ?: return
 
-    Row {
+    Row(modifier = Modifier.padding(top = 8.dp)) {
         Spacer(Modifier.weight(1f))
         Text(
             text = sign,
@@ -312,14 +312,14 @@ fun InvoiceItem(item: ItemEntity) {
     val quantity = remember(item) { item.quantity }
     val priceAfterVat = remember(item) { item.priceAfterVat }
 
-    Box(Modifier.padding(vertical = 4.dp, horizontal = 8.dp)) {
+    Card(Modifier.padding(vertical = 4.dp, horizontal = 8.dp)) {
         Row(
             Modifier
                 .background(
                     MaterialTheme.colorScheme.secondaryContainer,
-                    shape = RoundedCornerShape(4.dp)
+                    shape = RoundedCornerShape(16.dp)
                 )
-                .padding(PaddingValues(all = 8.dp))
+                .padding(PaddingValues(horizontal = 12.dp, vertical = 8.dp))
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -358,12 +358,16 @@ fun InvoiceItem(item: ItemEntity) {
 fun PreviewInvoiceItem() {
     val invoice = Invoice.getMockedSample()
     val item = invoice.items?.first()
-    InvoiceItem(item = item!!)
+    TwentyLekeTheme {
+        InvoiceItem(item = item!!)
+    }
 }
 
 @Preview
 @Composable
 fun PreviewDetailScreen() {
     val invoice = Invoice.getMockedSample()
-    DetailScreen(invoice = invoice, navigateBackToHome = { })
+    TwentyLekeTheme {
+        DetailScreen(invoice = invoice, navigateBackToHome = { })
+    }
 }
