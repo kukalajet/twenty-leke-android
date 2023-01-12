@@ -7,7 +7,7 @@ import com.squareup.moshi.Json
 data class PaymentMethodDTO(
     @Json(name = "by") val by: Long?,
     @Json(name = "type") val type: String?,
-    @Json(name = "amount") val amount: Int?,
+    @Json(name = "amount") val amount: Double?,
     @Json(name = "typeCode") val typeCode: TypeCode?
 ) {
     fun toEntity(): PaymentMethodEntity {

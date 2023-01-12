@@ -10,7 +10,7 @@ data class PaymentMethodEntity(
     @PrimaryKey(autoGenerate = true) var paymentMethodId: Int = 0,
     @Json(name = "by") val by: Long?,
     @Json(name = "type") val type: String?,
-    @Json(name = "amount") val amount: Int?,
+    @Json(name = "amount") val amount: Double?,
     @Json(name = "typeCode") val typeCode: TypeCode?
 ) {
     companion object {
@@ -20,7 +20,7 @@ data class PaymentMethodEntity(
                     paymentMethodId = 1234,
                     by = null,
                     type = "Banknotes and coins",
-                    amount = 344,
+                    amount = 344.0,
                     typeCode = TypeCode.BANKNOTE
                 )
             )
