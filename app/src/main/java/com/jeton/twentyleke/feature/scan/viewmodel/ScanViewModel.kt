@@ -11,7 +11,6 @@ import kotlinx.coroutines.launch
 class ScanViewModel(
     private val invoiceCheckRepository: InvoiceCheckRepository
 ) : ViewModel() {
-
     private val _scanResult = MutableStateFlow<ScanResult>(ScanResult.Initial)
     val scanResult: StateFlow<ScanResult>
         get() = _scanResult

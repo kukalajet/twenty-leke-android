@@ -28,6 +28,8 @@ import com.jeton.twentyleke.core.data.model.Invoice
 import com.jeton.twentyleke.core.data.model.entity.ItemEntity
 import com.jeton.twentyleke.core.data.model.entity.SellerEntity
 import com.jeton.twentyleke.core.ui.theme.TwentyLekeTheme
+import com.jeton.twentyleke.feature.detail.viewmodel.DetailViewModel
+import org.koin.androidx.compose.getViewModel
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.time.LocalDateTime
@@ -42,10 +44,10 @@ fun DetailScreen(invoice: Invoice?, navigateBackToHome: () -> Unit) {
         "Faturë ${invoice.header?.invoiceOrderNumber?.toInt()}"
     }
 
-//    val viewModel = getViewModel<DetailViewModel>()
+    val viewModel = getViewModel<DetailViewModel>()
 
     BackHandler(enabled = true, onBack = {
-//        viewModel.reset()
+        viewModel.reset()
         navigateBackToHome()
     })
 
@@ -79,7 +81,7 @@ fun DetailScreen(invoice: Invoice?, navigateBackToHome: () -> Unit) {
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 modifier = Modifier.padding(horizontal = 40.dp),
-                onClick = { },
+                onClick = { viewModel.saveInvoice(invoice) },
                 shape = FloatingActionButtonDefaults.extendedFabShape,
                 containerColor = MaterialTheme.colorScheme.primary,
             )

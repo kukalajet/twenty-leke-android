@@ -15,11 +15,6 @@ class InvoiceCheckRepository(
     private val invoiceCheckClient: InvoiceCheckClient,
     private val invoiceDao: InvoiceDao,
 ) {
-
-    init {
-        print(invoiceDao)
-    }
-
     suspend fun getInvoice(
         iic: String,
         dateTimeCreated: String,
@@ -34,6 +29,18 @@ class InvoiceCheckRepository(
 
         return response
     }
+
+    fun saveInvoiceInDB(invoice: Invoice) =
+        invoiceDao.insertInvoice(
+            invoice.header,
+            invoice.seller,
+            invoice.items,
+            invoice.paymentMethods
+        )
+
+
+    fun getAllInvoicesFromDB(): List<Invoice> = invoiceDao.getAllInvoices()
+
 
     private fun cacheInvoice(invoice: Invoice?) {
         val moshi = Moshi.Builder().build()
