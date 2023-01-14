@@ -16,9 +16,10 @@ data class ItemDTO(
     @Json(name = "vatAmount") val vatAmount: Double?,
     @Json(name = "priceAfterVat") val priceAfterVat: Double?,
 ) {
-    fun toEntity(): ItemEntity {
+    fun toEntity(invoiceId: Long): ItemEntity {
         return ItemEntity(
             id,
+            invoiceId,
             name,
             code,
             unit,

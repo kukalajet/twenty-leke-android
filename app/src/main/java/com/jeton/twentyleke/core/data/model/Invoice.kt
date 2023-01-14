@@ -9,21 +9,21 @@ import com.jeton.twentyleke.core.data.model.entity.SellerEntity
 
 data class Invoice(
     @Embedded val header: HeaderEntity?,
-    @Relation(parentColumn = "headerId", entityColumn = "sellerId")
+    @Relation(parentColumn = "invoiceId", entityColumn = "invoiceId")
     val seller: SellerEntity?,
-    @Relation(parentColumn = "headerId", entityColumn = "itemId")
+    @Relation(parentColumn = "invoiceId", entityColumn = "invoiceId")
     val items: List<ItemEntity>?,
-    @Relation(parentColumn = "headerId", entityColumn = "paymentMethodId")
+    @Relation(parentColumn = "invoiceId", entityColumn = "invoiceId")
     val paymentMethods: List<PaymentMethodEntity>?
 ) {
     companion object {
         fun getMockedSample(): Invoice {
-            return Invoice(
-                header = HeaderEntity.getMockedSample(),
-                seller = SellerEntity.getMockedSample(),
-                items = ItemEntity.getMockedSamples(),
-                paymentMethods = PaymentMethodEntity.getMockedSamples(),
-            )
+            val header = HeaderEntity.getMockedSample()
+            val invoiceId = header.invoiceId
+            val seller = SellerEntity.getMockedSample(invoiceId!!)
+            val items = ItemEntity.getMockedSamples(invoiceId)
+            val paymentMethods = PaymentMethodEntity.getMockedSamples(invoiceId)
+            return Invoice(header, seller, items, paymentMethods)
         }
     }
 }

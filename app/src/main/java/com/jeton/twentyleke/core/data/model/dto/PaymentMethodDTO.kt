@@ -10,8 +10,9 @@ data class PaymentMethodDTO(
     @Json(name = "amount") val amount: Double?,
     @Json(name = "typeCode") val typeCode: TypeCode?
 ) {
-    fun toEntity(): PaymentMethodEntity {
+    fun toEntity(invoiceId: Long): PaymentMethodEntity {
         return PaymentMethodEntity(
+            invoiceId = invoiceId,
             by = by,
             type = type,
             amount = amount,

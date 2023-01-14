@@ -3,37 +3,37 @@ package com.jeton.twentyleke.core.data.model.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.jeton.twentyleke.core.data.model.adapter.InvoiceType
-import com.squareup.moshi.Json
 import java.time.LocalDateTime
 
 @Entity(tableName = "Header")
 data class HeaderEntity(
-    @Json(name = "id") @PrimaryKey val headerId: Long?,
-    @Json(name = "iic") val iic: String?,
-    @Json(name = "totalPrice") val totalPrice: Double?,
-    @Json(name = "invoiceOrderNumber") val invoiceOrderNumber: Double?,
-    @Json(name = "businessUnit") val businessUnit: String?,
-    @Json(name = "cashRegister") val cashRegister: String?,
-    @Json(name = "issuerTaxNumber") val issuerTaxNumber: String?,
-    @Json(name = "dateTimeCreated") val dateTimeCreated: String?,
-    @Json(name = "fic") val fic: String?,
-    @Json(name = "invoiceType") val invoiceType: InvoiceType?,
-    @Json(name = "invoiceNumber") val invoiceNumber: String?,
-    @Json(name = "totalPriceWithoutVAT") val totalPriceWithoutVAT: Double?,
-    @Json(name = "totalVATAmount") val totalVATAmount: Double?,
-    @Json(name = "operatorCode") val operatorCode: String?,
-    @Json(name = "softwareCode") val softwareCode: String?,
-    @Json(name = "iicSignature") val iicSignature: String?,
+    @PrimaryKey val invoiceId: Long?,
+    val iic: String?,
+    val totalPrice: Double?,
+    val invoiceOrderNumber: Double?,
+    val businessUnit: String?,
+    val cashRegister: String?,
+    val issuerTaxNumber: String?,
+    val dateTimeCreated: String?,
+    val fic: String?,
+    val invoiceType: InvoiceType?,
+    val invoiceNumber: String?,
+    val totalPriceWithoutVAT: Double?,
+    val totalVATAmount: Double?,
+    val operatorCode: String?,
+    val softwareCode: String?,
+    val iicSignature: String?,
 ) {
 
     fun getLocalDateTimeCreated(): LocalDateTime {
-        return LocalDateTime.parse(dateTimeCreated)
+        val value = dateTimeCreated?.substring(0, dateTimeCreated.length - 5)
+        return LocalDateTime.parse(value)
     }
 
     companion object {
         fun getMockedSample(): HeaderEntity {
             return HeaderEntity(
-                headerId = 616388310,
+                invoiceId = 1,
                 iic = "5F02DA2E7197E0DB1D604F3A58233421",
                 totalPrice = 344.0,
                 invoiceOrderNumber = 773.0,

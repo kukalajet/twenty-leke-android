@@ -133,24 +133,18 @@ fun Invoice(invoice: Invoice) {
         "$totalPrice Lekë"
     }
     val time = remember(invoice) {
-
-//        val dateTimeCreated = invoice.header?.getLocalDateTimeCreated() ?: return@remember null
-//        "${dateTimeCreated.hour}:${dateTimeCreated.minute}"
-        val dateTimeCreated = invoice.header?.dateTimeCreated ?: return@remember null
-        "$dateTimeCreated"
+        try {
+            val dateTimeCreated = invoice.header?.getLocalDateTimeCreated()
+            return@remember "$dateTimeCreated"
+        } catch (e: Exception) {
+            return@remember null
+        }
     }
 
 
-    Card() {
+    Card(Modifier.padding(PaddingValues(all = 16.dp))) {
         Row(
-            Modifier.padding(
-                PaddingValues(
-                    start = 16.dp,
-                    end = 24.dp,
-                    top = 16.dp,
-                    bottom = 16.dp
-                )
-            ),
+            Modifier.padding(PaddingValues(all = 16.dp)),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(modifier = Modifier.weight(2f)) {

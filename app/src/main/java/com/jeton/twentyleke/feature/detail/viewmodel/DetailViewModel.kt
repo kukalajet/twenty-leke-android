@@ -15,7 +15,7 @@ class DetailViewModel(
     fun saveInvoice(invoice: Invoice) {
         viewModelScope.launch {
             CoroutineScope(Dispatchers.IO).launch {
-                invoiceCheckRepository.saveInvoiceInDB(invoice)
+                invoiceCheckRepository.saveInvoice(invoice)
             }
         }
     }

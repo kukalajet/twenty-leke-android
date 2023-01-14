@@ -12,8 +12,9 @@ data class SellerDTO(
     @Json(name = "town") val town: String?,
     @Json(name = "country") val country: String?
 ) {
-    fun toEntity(): SellerEntity {
+    fun toEntity(invoiceId: Long): SellerEntity {
         return SellerEntity(
+            invoiceId = invoiceId,
             idType = idType,
             idNum = idNum,
             name = name,

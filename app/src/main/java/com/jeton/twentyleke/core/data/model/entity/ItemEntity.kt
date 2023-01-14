@@ -2,27 +2,28 @@ package com.jeton.twentyleke.core.data.model.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.squareup.moshi.Json
 
 @Entity(tableName = "Item")
 data class ItemEntity(
-    @Json(name = "id") @PrimaryKey val itemId: Long?,
-    @Json(name = "name") val name: String?,
-    @Json(name = "code") val code: String?,
-    @Json(name = "unit") val unit: String?,
-    @Json(name = "quantity") val quantity: Double?,
-    @Json(name = "unitPriceBeforeVat") val unitPriceBeforeVat: Double?,
-    @Json(name = "unitPriceAfterVat") val unitPriceAfterVat: Double?,
-    @Json(name = "priceBeforeVat") val priceBeforeVat: Double?,
-    @Json(name = "vatRate") val vatRate: Double?,
-    @Json(name = "vatAmount") val vatAmount: Double?,
-    @Json(name = "priceAfterVat") val priceAfterVat: Double?,
+    @PrimaryKey val itemId: Long?,
+    val invoiceId: Long,
+    val name: String?,
+    val code: String?,
+    val unit: String?,
+    val quantity: Double?,
+    val unitPriceBeforeVat: Double?,
+    val unitPriceAfterVat: Double?,
+    val priceBeforeVat: Double?,
+    val vatRate: Double?,
+    val vatAmount: Double?,
+    val priceAfterVat: Double?,
 ) {
     companion object {
-        fun getMockedSamples(): List<ItemEntity> {
+        fun getMockedSamples(invoiceId: Long): List<ItemEntity> {
             return listOf(
                 ItemEntity(
                     itemId = 1527326185,
+                    invoiceId = invoiceId,
                     name = "COCA COLA 900 ML (6)",
                     code = "1",
                     unit = "cope",
@@ -35,6 +36,7 @@ data class ItemEntity(
                     priceAfterVat = 85.0
                 ), ItemEntity(
                     itemId = 1527326186,
+                    invoiceId = invoiceId,
                     name = "TWIX X -TRA SINGLE 85 GR (30)",
                     code = "1",
                     unit = "cope",
@@ -47,6 +49,7 @@ data class ItemEntity(
                     priceAfterVat = 85.0
                 ), ItemEntity(
                     itemId = 1527326187,
+                    invoiceId = invoiceId,
                     name = "BOUNTY 57 GR (24)",
                     code = "1",
                     unit = "cope",
@@ -59,6 +62,7 @@ data class ItemEntity(
                     priceAfterVat = 70.0
                 ), ItemEntity(
                     itemId = 1527326188,
+                    invoiceId = invoiceId,
                     name = "KIT KAT DARK 70 % 41.5 G XE(24)",
                     code = "1",
                     unit = "cope",
@@ -71,6 +75,7 @@ data class ItemEntity(
                     priceAfterVat = 89.0
                 ), ItemEntity(
                     itemId = 1527326189,
+                    invoiceId = invoiceId,
                     name = "QESE E VOGEL 2022",
                     code = "1",
                     unit = "cope",
@@ -84,6 +89,7 @@ data class ItemEntity(
                 ),
                 ItemEntity(
                     itemId = 1527326185,
+                    invoiceId = invoiceId,
                     name = "COCA COLA 900 ML (6)",
                     code = "1",
                     unit = "cope",
@@ -96,6 +102,7 @@ data class ItemEntity(
                     priceAfterVat = 85.0
                 ), ItemEntity(
                     itemId = 1527326186,
+                    invoiceId = invoiceId,
                     name = "TWIX X -TRA SINGLE 85 GR (30)",
                     code = "1",
                     unit = "cope",
@@ -108,6 +115,7 @@ data class ItemEntity(
                     priceAfterVat = 85.0
                 ), ItemEntity(
                     itemId = 1527326187,
+                    invoiceId = invoiceId,
                     name = "BOUNTY 57 GR (24)",
                     code = "1",
                     unit = "cope",
@@ -120,6 +128,7 @@ data class ItemEntity(
                     priceAfterVat = 70.0
                 ), ItemEntity(
                     itemId = 1527326188,
+                    invoiceId = invoiceId,
                     name = "KIT KAT DARK 70 % 41.5 G XE(24)",
                     code = "1",
                     unit = "cope",
@@ -132,6 +141,7 @@ data class ItemEntity(
                     priceAfterVat = 89.0
                 ), ItemEntity(
                     itemId = 1527326189,
+                    invoiceId = invoiceId,
                     name = "QESE E VOGEL 2022",
                     code = "1",
                     unit = "cope",
@@ -145,6 +155,7 @@ data class ItemEntity(
                 ),
                 ItemEntity(
                     itemId = 1527326185,
+                    invoiceId = invoiceId,
                     name = "COCA COLA 900 ML (6)",
                     code = "1",
                     unit = "cope",
@@ -157,6 +168,7 @@ data class ItemEntity(
                     priceAfterVat = 85.0
                 ), ItemEntity(
                     itemId = 1527326186,
+                    invoiceId = invoiceId,
                     name = "TWIX X -TRA SINGLE 85 GR (30)",
                     code = "1",
                     unit = "cope",
@@ -169,6 +181,7 @@ data class ItemEntity(
                     priceAfterVat = 85.0
                 ), ItemEntity(
                     itemId = 1527326187,
+                    invoiceId = invoiceId,
                     name = "BOUNTY 57 GR (24)",
                     code = "1",
                     unit = "cope",
@@ -181,6 +194,7 @@ data class ItemEntity(
                     priceAfterVat = 70.0
                 ), ItemEntity(
                     itemId = 1527326188,
+                    invoiceId = invoiceId,
                     name = "KIT KAT DARK 70 % 41.5 G XE(24)",
                     code = "1",
                     unit = "cope",
@@ -193,6 +207,7 @@ data class ItemEntity(
                     priceAfterVat = 89.0
                 ), ItemEntity(
                     itemId = 1527326189,
+                    invoiceId = invoiceId,
                     name = "QESE E VOGEL 2022",
                     code = "1",
                     unit = "cope",
@@ -206,6 +221,7 @@ data class ItemEntity(
                 ),
                 ItemEntity(
                     itemId = 1527326185,
+                    invoiceId = 1,
                     name = "COCA COLA 900 ML (6)",
                     code = "1",
                     unit = "cope",
@@ -218,6 +234,7 @@ data class ItemEntity(
                     priceAfterVat = 85.0
                 ), ItemEntity(
                     itemId = 1527326186,
+                    invoiceId = 1,
                     name = "TWIX X -TRA SINGLE 85 GR (30)",
                     code = "1",
                     unit = "cope",
@@ -230,6 +247,7 @@ data class ItemEntity(
                     priceAfterVat = 85.0
                 ), ItemEntity(
                     itemId = 1527326187,
+                    invoiceId = 1,
                     name = "BOUNTY 57 GR (24)",
                     code = "1",
                     unit = "cope",
@@ -242,6 +260,7 @@ data class ItemEntity(
                     priceAfterVat = 70.0
                 ), ItemEntity(
                     itemId = 1527326188,
+                    invoiceId = 1,
                     name = "KIT KAT DARK 70 % 41.5 G XE(24)",
                     code = "1",
                     unit = "cope",
@@ -254,6 +273,7 @@ data class ItemEntity(
                     priceAfterVat = 89.0
                 ), ItemEntity(
                     itemId = 1527326189,
+                    invoiceId = 1,
                     name = "QESE E VOGEL 2022",
                     code = "1",
                     unit = "cope",
@@ -266,6 +286,7 @@ data class ItemEntity(
                     priceAfterVat = 15.0
                 ), ItemEntity(
                     itemId = 1527326185,
+                    invoiceId = 1,
                     name = "COCA COLA 900 ML (6)",
                     code = "1",
                     unit = "cope",
@@ -278,6 +299,7 @@ data class ItemEntity(
                     priceAfterVat = 85.0
                 ), ItemEntity(
                     itemId = 1527326186,
+                    invoiceId = 1,
                     name = "TWIX X -TRA SINGLE 85 GR (30)",
                     code = "1",
                     unit = "cope",
@@ -290,6 +312,7 @@ data class ItemEntity(
                     priceAfterVat = 85.0
                 ), ItemEntity(
                     itemId = 1527326187,
+                    invoiceId = 1,
                     name = "BOUNTY 57 GR (24)",
                     code = "1",
                     unit = "cope",
@@ -302,6 +325,7 @@ data class ItemEntity(
                     priceAfterVat = 70.0
                 ), ItemEntity(
                     itemId = 1527326188,
+                    invoiceId = 1,
                     name = "KIT KAT DARK 70 % 41.5 G XE(24)",
                     code = "1",
                     unit = "cope",
@@ -314,6 +338,7 @@ data class ItemEntity(
                     priceAfterVat = 89.0
                 ), ItemEntity(
                     itemId = 1527326189,
+                    invoiceId = 1,
                     name = "QESE E VOGEL 2022",
                     code = "1",
                     unit = "cope",

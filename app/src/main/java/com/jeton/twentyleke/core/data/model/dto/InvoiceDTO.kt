@@ -30,9 +30,9 @@ data class InvoiceDTO(
 ) {
     fun toInvoice(): Invoice {
         val header = getHeaderEntity()
-        val seller = seller?.toEntity()
-        val items = getItemEntities()
-        val paymentMethods = getPaymentMethodEntities()
+        val seller = seller?.toEntity(header.invoiceId!!)
+        val items = getItemEntities(header.invoiceId!!)
+        val paymentMethods = getPaymentMethodEntities(header.invoiceId!!)
         return Invoice(
             header = header,
             seller = seller,
@@ -62,11 +62,11 @@ data class InvoiceDTO(
         )
     }
 
-    private fun getPaymentMethodEntities(): List<PaymentMethodEntity>? {
-        return paymentMethod?.map { it.toEntity() }
+    private fun getPaymentMethodEntities(invoiceId: Long): List<PaymentMethodEntity>? {
+        return paymentMethod?.map { it.toEntity(invoiceId) }
     }
 
-    private fun getItemEntities(): List<ItemEntity>? {
-        return items?.map { it.toEntity() }
+    private fun getItemEntities(invoiceId: Long): List<ItemEntity>? {
+        return items?.map { it.toEntity(invoiceId) }
     }
 }

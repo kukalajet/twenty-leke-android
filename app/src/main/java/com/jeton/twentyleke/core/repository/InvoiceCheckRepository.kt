@@ -30,13 +30,7 @@ class InvoiceCheckRepository(
         return response
     }
 
-    fun saveInvoiceInDB(invoice: Invoice) =
-        invoiceDao.insertInvoice(
-            invoice.header,
-            invoice.seller,
-            invoice.items,
-            invoice.paymentMethods
-        )
+    fun saveInvoice(invoice: Invoice) = invoiceDao.insertInvoice(invoice)
 
 
     fun getAllInvoicesFromDB(): List<Invoice> = invoiceDao.getAllInvoices()
