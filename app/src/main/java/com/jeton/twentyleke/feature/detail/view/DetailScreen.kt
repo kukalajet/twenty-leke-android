@@ -308,61 +308,12 @@ fun InvoiceSignSection(invoiceOrderNumber: Double?, year: Int?, cashRegister: St
 }
 
 @Composable
-fun InvoiceItem(item: ItemEntity) {
-    val name = remember(item) { item.name }
-    val quantity = remember(item) { item.quantity }
-    val priceAfterVat = remember(item) { item.priceAfterVat }
-
-    Row(
-        Modifier.padding(PaddingValues(start = 16.dp, end = 24.dp, top = 16.dp, bottom = 16.dp)),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Column(modifier = Modifier.weight(2f)) {
-            name?.let {
-                Text(
-                    text = name,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-            }
-            Text(
-                text = "x $quantity",
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-        }
-        Text(
-            text = "$priceAfterVat Lekë",
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.padding(PaddingValues(start = 8.dp))
-        )
-    }
-}
-
-@Composable
 fun InvoiceItemDivider() {
     Divider(
         thickness = 1.dp,
         color = MaterialTheme.colorScheme.outlineVariant,
         modifier = Modifier.padding(horizontal = 16.dp)
     )
-}
-
-@Preview
-@Composable
-fun PreviewInvoiceItem() {
-    val invoice = Invoice.getMockedSample()
-    val item = invoice.items?.first()
-    TwentyLekeTheme {
-        InvoiceItem(item = item!!)
-    }
 }
 
 @Preview
