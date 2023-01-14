@@ -124,77 +124,7 @@ fun HomeScreen(
     }
 }
 
-@Composable
-fun Invoice(invoice: Invoice) {
-    val sellerName = remember(invoice) { invoice.seller?.name }
-    val sellerAddress = remember(invoice) { invoice.seller?.address }
-    val totalPrice = remember(invoice) {
-        val totalPrice = invoice.header?.totalPrice?.toInt() ?: return@remember null
-        "$totalPrice Lekë"
-    }
-    val time = remember(invoice) {
-        try {
-            val dateTimeCreated = invoice.header?.getLocalDateTimeCreated()
-            return@remember "$dateTimeCreated"
-        } catch (e: Exception) {
-            return@remember null
-        }
-    }
-
-
-    Card(Modifier.padding(PaddingValues(all = 16.dp))) {
-        Row(
-            Modifier.padding(PaddingValues(all = 16.dp)),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Column(modifier = Modifier.weight(2f)) {
-                sellerName?.let {
-                    Text(
-                        sellerName, maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-                sellerAddress?.let {
-                    Text(
-                        sellerAddress, maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-            }
-            Column() {
-                totalPrice?.let {
-                    Text(
-                        totalPrice, maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-                time?.let {
-                    Text(
-                        time, maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-            }
-        }
-    }
-}
-
 @Preview
-@Composable
-fun PreviewInvoice() {
-    val invoice = Invoice.getMockedSample()
-    Invoice(invoice = invoice)
-}
-
-//@Preview
 @Composable
 fun PreviewHomeScreen() {
     HomeScreen(navigateToScan = { })
