@@ -4,23 +4,19 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.graphics.BlendMode
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.jeton.twentyleke.core.data.model.Invoice
+import com.jeton.twentyleke.core.ui.composable.ExtendableFloatingActionButton
+import com.jeton.twentyleke.core.ui.composable.isScrollingUp
 import com.jeton.twentyleke.feature.home.viewmodel.AllInvoicesResult
 import com.jeton.twentyleke.feature.home.viewmodel.HomeViewModel
 import org.koin.androidx.compose.getViewModel
@@ -34,36 +30,30 @@ fun HomeScreen(
     val viewModel = getViewModel<HomeViewModel>()
     val allInvoicesResult = viewModel.allInvoicesResult.collectAsState()
 
+    val listState = rememberLazyListState()
+
     Scaffold(
-        floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = {
-            ExtendedFloatingActionButton(
-                modifier = Modifier.padding(horizontal = 40.dp),
-                onClick = { navigateToScan() },
-                shape = FloatingActionButtonDefaults.extendedFabShape,
-                containerColor = MaterialTheme.colorScheme.primary,
-            )
-            {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        Icons.Filled.Add,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onPrimary,
-                        modifier = Modifier.padding(end = 4.dp)
-                    )
+            ExtendableFloatingActionButton(
+                extended = listState.isScrollingUp(),
+                text = {
                     Text(
-                        text = "Add new invoice",
+                        "Add Invoice",
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onPrimary,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                },
+                onClick = { navigateToScan() },
+                icon = {
+                    Icon(
+                        Icons.Rounded.Add,
+                        contentDescription = "Add an Invoice",
+                        tint = MaterialTheme.colorScheme.onPrimary
                     )
                 }
-            }
+            )
         },
     ) { innerPadding ->
         when (allInvoicesResult.value) {
@@ -92,32 +82,16 @@ fun HomeScreen(
             }
             is AllInvoicesResult.Success -> {
                 LazyColumn(
+                    state = listState,
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(innerPadding)
                         .background(MaterialTheme.colorScheme.background)
-                        // https://stackoverflow.com/a/68738725
-                        .graphicsLayer { alpha = 0.99F }
-                        .drawWithContent {
-                            val colors = listOf(
-                                Color.Transparent,
-                                Color.Transparent,
-                                Color.Transparent,
-                                Color.Transparent,
-                                Color.Transparent,
-                                Color.Black
-                            )
-                            drawContent()
-                            drawRect(
-                                brush = Brush.verticalGradient(colors),
-                                blendMode = BlendMode.DstOut
-                            )
-                        }
                 ) {
                     items(items = (allInvoicesResult.value as AllInvoicesResult.Success).data) {
                         Invoice(it)
                     }
-                    item { Spacer(modifier = Modifier.padding(40.dp)) }
+                    item { Spacer(modifier = Modifier.size(80.dp)) }
                 }
             }
         }
