@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun ScanRoute(
-    navigateToDetail: () -> Unit
+    navigateToInvoiceDetail: (invoiceId: Long?) -> Unit
 ) {
-    ScanScreen(navigateToDetail = navigateToDetail)
+    ScanScreen(navigateToInvoiceDetail = navigateToInvoiceDetail)
 }

@@ -13,6 +13,9 @@ interface InvoiceDao {
     @Query("SELECT * FROM header")
     fun getAllInvoices(): List<Invoice>
 
+    @Query("SELECT * FROM header WHERE invoiceId = :invoiceId")
+    fun getInvoiceById(invoiceId: Long): Invoice
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertHeader(header: HeaderEntity)
 

@@ -2,6 +2,7 @@ package com.jeton.twentyleke.feature.home.view
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -13,8 +14,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jeton.twentyleke.core.data.model.Invoice
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Invoice(invoice: Invoice) {
+fun Invoice(invoice: Invoice, onPress: () -> Unit = {}) {
     val sellerName = remember(invoice) { invoice.seller?.name }
     val sellerAddress = remember(invoice) { invoice.seller?.address }
     val totalPrice = remember(invoice) {
@@ -34,7 +36,10 @@ fun Invoice(invoice: Invoice) {
     }
 
 
-    Card(Modifier.padding(PaddingValues(all = 8.dp))) {
+    Card(
+        onClick = onPress,
+        modifier = Modifier.padding(PaddingValues(all = 8.dp)),
+    ) {
         Row(
             modifier = Modifier
                 .padding(all = 8.dp)

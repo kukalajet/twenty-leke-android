@@ -38,8 +38,12 @@ class TwentyLekeNavigationActions(navController: NavHostController) {
         }
     }
 
-    val navigateToDetail: () -> Unit = {
-        navController.navigate(TwentyLekeDestinations.DETAIL_ROUTE) {
+    val navigateToInvoiceDetail: (invoiceId: Long?) -> Unit = { invoiceId ->
+        val route =
+            if (invoiceId != null) "${TwentyLekeDestinations.DETAIL_ROUTE}/$invoiceId"
+            else TwentyLekeDestinations.DETAIL_ROUTE
+
+        navController.navigate(route) {
             popUpTo(navController.graph.findStartDestination().id) {
                 saveState = true
             }

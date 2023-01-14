@@ -28,7 +28,7 @@ import org.koin.androidx.compose.getViewModel
 @Composable
 fun ScanScreen(
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
-    navigateToDetail: () -> Unit
+    navigateToInvoiceDetail: (invoiceId: Long?) -> Unit,
 ) {
     val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
     val viewModel = getViewModel<ScanViewModel>()
@@ -57,7 +57,7 @@ fun ScanScreen(
 
     LaunchedEffect(scanResult.value) {
         if (scanResult.value is ScanResult.Success) {
-            navigateToDetail()
+            navigateToInvoiceDetail(null)
         }
     }
 

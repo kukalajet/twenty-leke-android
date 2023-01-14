@@ -32,9 +32,9 @@ class InvoiceCheckRepository(
 
     fun saveInvoice(invoice: Invoice) = invoiceDao.insertInvoice(invoice)
 
-
     fun getAllInvoicesFromDB(): List<Invoice> = invoiceDao.getAllInvoices()
 
+    fun getInvoiceByIdFromDB(invoiceId: Long): Invoice = invoiceDao.getInvoiceById(invoiceId)
 
     private fun cacheInvoice(invoice: Invoice?) {
         val moshi = Moshi.Builder().build()

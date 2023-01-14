@@ -25,7 +25,8 @@ import org.koin.androidx.compose.getViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    navigateToScan: () -> Unit
+    navigateToScan: () -> Unit,
+    navigateToPersistedInvoiceDetail: (invoiceId: Long) -> Unit,
 ) {
     val viewModel = getViewModel<HomeViewModel>()
     val allInvoicesResult = viewModel.allInvoicesResult.collectAsState()
@@ -89,7 +90,10 @@ fun HomeScreen(
                         .background(MaterialTheme.colorScheme.background)
                 ) {
                     items(items = (allInvoicesResult.value as AllInvoicesResult.Success).data) {
-                        Invoice(it)
+                        Invoice(
+                            it,
+                            onPress = { navigateToPersistedInvoiceDetail(it.header!!.invoiceId!!) },
+                        )
                     }
                     item { Spacer(modifier = Modifier.size(80.dp)) }
                 }
@@ -101,5 +105,5 @@ fun HomeScreen(
 @Preview
 @Composable
 fun PreviewHomeScreen() {
-    HomeScreen(navigateToScan = { })
+    HomeScreen(navigateToScan = { }, navigateToPersistedInvoiceDetail = {})
 }

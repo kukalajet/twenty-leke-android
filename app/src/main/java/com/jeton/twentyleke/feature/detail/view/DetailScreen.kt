@@ -46,10 +46,10 @@ fun DetailScreen(invoice: Invoice?, navigateBackToHome: () -> Unit) {
 
     val viewModel = getViewModel<DetailViewModel>()
 
-    BackHandler(enabled = true, onBack = {
-        viewModel.reset()
-        navigateBackToHome()
-    })
+    BackHandler(
+        enabled = true,
+        onBack = { navigateBackToHome() }
+    )
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,

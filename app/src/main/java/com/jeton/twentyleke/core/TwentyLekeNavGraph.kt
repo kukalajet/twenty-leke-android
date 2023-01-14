@@ -2,15 +2,15 @@ package com.jeton.twentyleke.core
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.NavHost
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.jeton.twentyleke.core.repository.InvoiceCheckRepository
+import androidx.navigation.navArgument
 import com.jeton.twentyleke.feature.detail.view.DetailRoute
 import com.jeton.twentyleke.feature.home.view.HomeRoute
 import com.jeton.twentyleke.feature.scan.view.ScanRoute
-import org.koin.androidx.compose.get
 
 @Composable
 fun TwentyLekeNavGraph(
@@ -19,7 +19,7 @@ fun TwentyLekeNavGraph(
     startDestination: String = TwentyLekeDestinations.HOME_ROUTE,
     navigateToHome: () -> Unit,
     navigateToScan: () -> Unit,
-    navigateToDetail: () -> Unit,
+    navigateToInvoiceDetail: (invoiceId: Long?) -> Unit,
 ) {
     NavHost(
         navController = navController,
@@ -27,19 +27,27 @@ fun TwentyLekeNavGraph(
         modifier = modifier,
     ) {
         composable(TwentyLekeDestinations.HOME_ROUTE) {
-            HomeRoute(navigateToScan = navigateToScan)
+            HomeRoute(navigateToScan, navigateToInvoiceDetail)
         }
 
         composable(TwentyLekeDestinations.SCAN_ROUTE) {
-            ScanRoute(navigateToDetail = navigateToDetail)
+            ScanRoute(navigateToInvoiceDetail = navigateToInvoiceDetail)
         }
 
         composable(TwentyLekeDestinations.DETAIL_ROUTE) {
             // Do you think I don't hate this implementation too?
             // Take notes: https://stackoverflow.com/a/69060224
-            val invoiceCheckRepository = get<InvoiceCheckRepository>()
-            val cachedInvoice = invoiceCheckRepository.getCachedInvoice()
-            DetailRoute(invoice = cachedInvoice, navigateBackToHome = navigateToHome)
+            DetailRoute(invoiceId = null, navigateBackToHome = navigateToHome)
+        }
+
+        composable(
+            "${TwentyLekeDestinations.DETAIL_ROUTE}/{invoiceId}",
+            arguments = listOf(navArgument("invoiceId") { type = NavType.LongType })
+        ) { backStackEntry ->
+            // Do you think I don't hate this implementation too?
+            // Take notes: https://stackoverflow.com/a/69060224
+            val invoiceId = backStackEntry.arguments?.getLong("invoiceId")
+            DetailRoute(invoiceId = invoiceId, navigateBackToHome = navigateToHome)
         }
     }
 }

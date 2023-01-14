@@ -4,7 +4,8 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun HomeRoute(
-    navigateToScan: () -> Unit
+    navigateToScan: () -> Unit,
+    navigateToPersistedInvoiceDetail: (invoiceId: Long) -> Unit,
 ) {
-    HomeScreen(navigateToScan = navigateToScan)
+    HomeScreen(navigateToScan, navigateToPersistedInvoiceDetail)
 }
