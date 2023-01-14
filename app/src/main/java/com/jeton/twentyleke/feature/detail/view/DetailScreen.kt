@@ -25,7 +25,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jeton.twentyleke.core.data.model.Invoice
-import com.jeton.twentyleke.core.data.model.entity.ItemEntity
 import com.jeton.twentyleke.core.data.model.entity.SellerEntity
 import com.jeton.twentyleke.core.ui.theme.TwentyLekeTheme
 import com.jeton.twentyleke.feature.detail.viewmodel.DetailViewModel
@@ -77,74 +76,53 @@ fun DetailScreen(invoice: Invoice?, navigateBackToHome: () -> Unit) {
                 modifier = Modifier.background(color = MaterialTheme.colorScheme.primaryContainer),
             )
         },
-        floatingActionButtonPosition = FabPosition.Center,
-        floatingActionButton = {
-            ExtendedFloatingActionButton(
-                modifier = Modifier.padding(horizontal = 40.dp),
-                onClick = { viewModel.saveInvoice(invoice) },
-                shape = FloatingActionButtonDefaults.extendedFabShape,
-                containerColor = MaterialTheme.colorScheme.primary,
-            )
-            {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        Icons.Filled.Done,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onPrimary,
-                        modifier = Modifier.padding(end = 4.dp)
-                    )
-                    Text(
-                        text = "Add new invoice",
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onPrimary,
-                    )
-                }
-            }
-        },
     ) { innerPadding ->
-        LazyColumn(
+        Box(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxHeight(1f)
                 .padding(innerPadding)
-                .background(MaterialTheme.colorScheme.background)
-                // https://stackoverflow.com/a/68738725
-                .graphicsLayer { alpha = 0.99F }
-                .drawWithContent {
-                    val colors = listOf(
-                        Color.Transparent,
-                        Color.Transparent,
-                        Color.Transparent,
-                        Color.Transparent,
-                        Color.Transparent,
-                        Color.Black
-                    )
-                    drawContent()
-                    drawRect(
-                        brush = Brush.verticalGradient(colors),
-                        blendMode = BlendMode.DstOut
+        ) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.background)
+                    // https://stackoverflow.com/a/68738725
+                    .graphicsLayer { alpha = 0.99F }
+                    .drawWithContent {
+                        val colors = listOf(
+                            Color.Transparent,
+                            Color.Transparent,
+                            Color.Transparent,
+                            Color.Transparent,
+                            Color.Transparent,
+                            Color.Black
+                        )
+                        drawContent()
+                        drawRect(
+                            brush = Brush.verticalGradient(colors),
+                            blendMode = BlendMode.DstOut
+                        )
+                    }
+            ) {
+                item {
+                    HeaderSection(invoice = invoice)
+                    Box(
+                        Modifier
+                            .fillMaxWidth(1f)
+                            .height(4.dp)
                     )
                 }
-        ) {
-            item {
-                HeaderSection(invoice = invoice)
-                Box(
-                    Modifier
-                        .fillMaxWidth(1f)
-                        .height(4.dp)
-                )
+                itemsIndexed(items = invoiceItems!!) { index, item ->
+                    InvoiceItem(item = item)
+                    if (index < invoiceItems.lastIndex)
+                        InvoiceItemDivider()
+                }
+                item { Spacer(modifier = Modifier.padding(40.dp)) }
             }
-            itemsIndexed(items = invoiceItems!!) { index, item ->
-                InvoiceItem(item = item)
-                if (index < invoiceItems.lastIndex)
-                    InvoiceItemDivider()
+
+            AddInvoiceButton(modifier = Modifier.align(Alignment.BottomCenter)) {
+                viewModel.saveInvoice(invoice)
             }
-            item { Spacer(modifier = Modifier.padding(40.dp)) }
         }
     }
 }
@@ -314,6 +292,36 @@ fun InvoiceItemDivider() {
         color = MaterialTheme.colorScheme.outlineVariant,
         modifier = Modifier.padding(horizontal = 16.dp)
     )
+}
+
+@Composable
+fun AddInvoiceButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
+    Button(
+        onClick = onClick,
+        modifier = modifier.padding(horizontal = 16.dp, vertical = 16.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                Icons.Filled.Done,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onPrimary,
+                modifier = Modifier.padding(end = 16.dp)
+            )
+            Text(
+                text = "Add new invoice",
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onPrimary,
+            )
+        }
+    }
 }
 
 @Preview
