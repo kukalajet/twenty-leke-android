@@ -4,8 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jeton.twentyleke.core.data.model.Invoice
 import com.jeton.twentyleke.core.repository.InvoiceCheckRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -25,10 +23,8 @@ class HomeViewModel(
     private fun getAllInvoices() {
         viewModelScope.launch {
             _allInvoicesResult.emit(AllInvoicesResult.Initial)
-            CoroutineScope(Dispatchers.IO).launch {
-                val invoices = invoiceCheckRepository.getAllInvoicesFromDB()
-                _allInvoicesResult.emit(AllInvoicesResult.Success(invoices))
-            }
+            val invoices = invoiceCheckRepository.getAllInvoicesFromDB()
+            _allInvoicesResult.emit(AllInvoicesResult.Success(invoices))
         }
     }
 }

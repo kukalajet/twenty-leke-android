@@ -20,16 +20,15 @@ class DetailViewModel(
     fun getInvoice(invoiceId: Long?) {
         viewModelScope.launch {
             _invoiceResult.emit(InvoiceFetchResult.Initial)
-            CoroutineScope(Dispatchers.IO).launch {
-                val invoice =
-                    if (invoiceId != null) invoiceCheckRepository.getInvoiceByIdFromDB(invoiceId)
-                    else invoiceCheckRepository.getCachedInvoice()
-                invoice?.let {
-                    _invoiceResult.emit(InvoiceFetchResult.Success(it))
-                } ?: run {
-                    _invoiceResult.emit(InvoiceFetchResult.Failure("Couldn't retrieve the requested invoice"))
-                }
+            val invoice =
+                if (invoiceId != null) invoiceCheckRepository.getInvoiceByIdFromDB(invoiceId)
+                else invoiceCheckRepository.getCachedInvoice()
+            invoice?.let {
+                _invoiceResult.emit(InvoiceFetchResult.Success(it))
+            } ?: run {
+                _invoiceResult.emit(InvoiceFetchResult.Failure("Couldn't retrieve the requested invoice"))
             }
+
         }
     }
 

@@ -11,10 +11,10 @@ import com.jeton.twentyleke.core.data.model.entity.SellerEntity
 interface InvoiceDao {
 
     @Query("SELECT * FROM header")
-    fun getAllInvoices(): List<Invoice>
+    suspend fun getAllInvoices(): List<Invoice>
 
     @Query("SELECT * FROM header WHERE invoiceId = :invoiceId")
-    fun getInvoiceById(invoiceId: Long): Invoice
+    suspend fun getInvoiceById(invoiceId: Long): Invoice
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertHeader(header: HeaderEntity)
@@ -40,14 +40,14 @@ interface InvoiceDao {
     @Delete
     fun deletePaymentMethods(paymentMethods: List<PaymentMethodEntity>)
 
-    fun insertInvoice(invoice: Invoice) {
+    suspend fun insertInvoice(invoice: Invoice) {
         invoice.header?.let { it -> insertHeader(it) }
         invoice.seller?.let { it -> insertSeller(it) }
         invoice.items?.let { it -> insertItems(it) }
         invoice.paymentMethods?.let { insertPaymentMethods(it) }
     }
 
-    fun deleteInvoice(invoice: Invoice) {
+    suspend fun deleteInvoice(invoice: Invoice) {
         invoice.header?.let { it -> deleteHeader(it) }
         invoice.seller?.let { it -> deleteSeller(it) }
         invoice.items?.let { it -> deleteItems(it) }
