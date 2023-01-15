@@ -6,6 +6,8 @@ import com.jeton.twentyleke.core.data.model.entity.HeaderEntity
 import com.jeton.twentyleke.core.data.model.entity.ItemEntity
 import com.jeton.twentyleke.core.data.model.entity.PaymentMethodEntity
 import com.jeton.twentyleke.core.data.model.entity.SellerEntity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Dao
 interface InvoiceDao {
@@ -41,16 +43,20 @@ interface InvoiceDao {
     fun deletePaymentMethods(paymentMethods: List<PaymentMethodEntity>)
 
     suspend fun insertInvoice(invoice: Invoice) {
-        invoice.header?.let { it -> insertHeader(it) }
-        invoice.seller?.let { it -> insertSeller(it) }
-        invoice.items?.let { it -> insertItems(it) }
-        invoice.paymentMethods?.let { insertPaymentMethods(it) }
+        withContext(Dispatchers.IO) {
+            invoice.header?.let { it -> insertHeader(it) }
+            invoice.seller?.let { it -> insertSeller(it) }
+            invoice.items?.let { it -> insertItems(it) }
+            invoice.paymentMethods?.let { insertPaymentMethods(it) }
+        }
     }
 
     suspend fun deleteInvoice(invoice: Invoice) {
-        invoice.header?.let { it -> deleteHeader(it) }
-        invoice.seller?.let { it -> deleteSeller(it) }
-        invoice.items?.let { it -> deleteItems(it) }
-        invoice.paymentMethods?.let { deletePaymentMethods(it) }
+        withContext(Dispatchers.IO) {
+            invoice.header?.let { it -> deleteHeader(it) }
+            invoice.seller?.let { it -> deleteSeller(it) }
+            invoice.items?.let { it -> deleteItems(it) }
+            invoice.paymentMethods?.let { deletePaymentMethods(it) }
+        }
     }
 }

@@ -6,10 +6,9 @@ import com.jeton.twentyleke.core.data.model.adapter.IdType
 
 @Entity(tableName = "Seller")
 data class SellerEntity(
-    @PrimaryKey(autoGenerate = true) var sellerId: Int = 0,
+    @PrimaryKey val idNum: String,
     val invoiceId: Long,
     val idType: IdType?,
-    val idNum: String?,
     val name: String?,
     val address: String?,
     val town: String?,

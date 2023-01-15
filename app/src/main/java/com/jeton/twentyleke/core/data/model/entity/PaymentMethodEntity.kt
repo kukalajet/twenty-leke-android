@@ -6,8 +6,7 @@ import com.jeton.twentyleke.core.data.model.adapter.TypeCode
 
 @Entity(tableName = "PaymentMethod")
 data class PaymentMethodEntity(
-    @PrimaryKey(autoGenerate = true) var paymentMethodId: Int = 0,
-    val invoiceId: Long,
+    @PrimaryKey val invoiceId: Long,
     val by: Long?,
     val type: String?,
     val amount: Double?,
@@ -17,7 +16,6 @@ data class PaymentMethodEntity(
         fun getMockedSamples(invoiceId: Long): List<PaymentMethodEntity> {
             return listOf(
                 PaymentMethodEntity(
-                    paymentMethodId = 1234,
                     invoiceId = invoiceId,
                     by = null,
                     type = "Banknotes and coins",

@@ -32,6 +32,8 @@ class InvoiceCheckRepository(
 
     suspend fun saveInvoice(invoice: Invoice) = invoiceDao.insertInvoice(invoice)
 
+    suspend fun deleteInvoice(invoice: Invoice) = invoiceDao.deleteInvoice(invoice)
+
     suspend fun getAllInvoicesFromDB(): List<Invoice> = invoiceDao.getAllInvoices()
 
     suspend fun getInvoiceByIdFromDB(invoiceId: Long): Invoice = invoiceDao.getInvoiceById(invoiceId)

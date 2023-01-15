@@ -9,6 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.jeton.twentyleke.feature.detail.viewmodel.DetailViewModel
@@ -22,6 +23,7 @@ fun DetailRoute(
 ) {
     val viewModel = getViewModel<DetailViewModel>()
     val invoiceResult = viewModel.invoiceResult.collectAsState()
+    val alreadyStoredInvoice = remember(invoiceId) { invoiceId != null }
 
     DisposableEffect(invoiceId) {
         viewModel.getInvoice(invoiceId)
@@ -43,7 +45,7 @@ fun DetailRoute(
         }
         is InvoiceFetchResult.Success -> {
             val invoice = (invoiceResult.value as InvoiceFetchResult.Success).data
-            DetailScreen(invoice, navigateBackToHome)
+            DetailScreen(invoice, alreadyStoredInvoice, navigateBackToHome)
         }
     }
 }

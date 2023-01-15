@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.*
@@ -35,7 +36,11 @@ import java.time.LocalDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailScreen(invoice: Invoice?, navigateBackToHome: () -> Unit) {
+fun DetailScreen(
+    invoice: Invoice?,
+    alreadyStoredInvoice: Boolean,
+    navigateBackToHome: () -> Unit
+) {
     if (invoice == null) return Box {}
 
     val invoiceItems = remember(invoice) { invoice.items }
@@ -120,9 +125,12 @@ fun DetailScreen(invoice: Invoice?, navigateBackToHome: () -> Unit) {
                 item { Spacer(modifier = Modifier.padding(40.dp)) }
             }
 
-            AddInvoiceButton(modifier = Modifier.align(Alignment.BottomCenter)) {
-                viewModel.saveInvoice(invoice)
-            }
+            ProcessInvoiceButton(
+                alreadyStoredInvoice = alreadyStoredInvoice,
+                modifier = Modifier.align(Alignment.BottomCenter),
+                onAdd = { viewModel.saveInvoice(invoice) },
+                onDelete = { viewModel.deleteInvoice(invoice) }
+            )
         }
     }
 }
@@ -295,9 +303,28 @@ fun InvoiceItemDivider() {
 }
 
 @Composable
-fun AddInvoiceButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
+fun ProcessInvoiceButton(
+    alreadyStoredInvoice: Boolean,
+    modifier: Modifier = Modifier,
+    onAdd: () -> Unit,
+    onDelete: () -> Unit
+) {
+    val title = remember(alreadyStoredInvoice) {
+        if (alreadyStoredInvoice) return@remember "Delete Invoice"
+        else return@remember "Add Invoice"
+    }
+    val icon = remember(alreadyStoredInvoice) {
+        if (alreadyStoredInvoice) return@remember Icons.Filled.Delete
+        else return@remember Icons.Filled.Done
+    }
+
     Button(
-        onClick = onClick,
+        onClick = {
+            if (alreadyStoredInvoice)
+                onDelete()
+            else
+                onAdd()
+        },
         modifier = modifier.padding(horizontal = 16.dp, vertical = 16.dp)
     ) {
         Row(
@@ -308,13 +335,13 @@ fun AddInvoiceButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                Icons.Filled.Done,
+                icon,
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier.padding(end = 16.dp)
             )
             Text(
-                text = "Add new invoice",
+                text = title,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.titleMedium,
@@ -329,6 +356,10 @@ fun AddInvoiceButton(modifier: Modifier = Modifier, onClick: () -> Unit) {
 fun PreviewDetailScreen() {
     val invoice = Invoice.getMockedSample()
     TwentyLekeTheme {
-        DetailScreen(invoice = invoice, navigateBackToHome = { })
+        DetailScreen(
+            invoice = invoice,
+            alreadyStoredInvoice = true,
+            navigateBackToHome = { }
+        )
     }
 }
