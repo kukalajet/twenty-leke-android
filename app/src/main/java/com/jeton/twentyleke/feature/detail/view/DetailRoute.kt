@@ -21,9 +21,9 @@ fun DetailRoute(
     invoiceId: Long?,
     navigateBackToHome: () -> Unit,
 ) {
+    val alreadyStoredInvoice = remember(invoiceId) { invoiceId != null }
     val viewModel = getViewModel<DetailViewModel>()
     val invoiceResult = viewModel.invoiceResult.collectAsState()
-    val alreadyStoredInvoice = remember(invoiceId) { invoiceId != null }
 
     DisposableEffect(invoiceId) {
         viewModel.getInvoice(invoiceId)

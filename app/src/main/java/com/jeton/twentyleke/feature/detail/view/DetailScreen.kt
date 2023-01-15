@@ -12,8 +12,7 @@ import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,6 +28,9 @@ import com.jeton.twentyleke.core.data.model.Invoice
 import com.jeton.twentyleke.core.data.model.entity.SellerEntity
 import com.jeton.twentyleke.core.ui.theme.TwentyLekeTheme
 import com.jeton.twentyleke.feature.detail.viewmodel.DetailViewModel
+import com.jeton.twentyleke.feature.detail.viewmodel.InvoiceRemovalResult
+import com.jeton.twentyleke.feature.detail.viewmodel.InvoiceSavingResult
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -37,18 +39,48 @@ import java.time.LocalDateTime
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(
-    invoice: Invoice?,
+    invoice: Invoice,
     alreadyStoredInvoice: Boolean,
     navigateBackToHome: () -> Unit
 ) {
-    if (invoice == null) return Box {}
+    val viewModel = getViewModel<DetailViewModel>()
+    val invoiceSavingResult = viewModel.invoiceSavingResult.collectAsState()
+    val invoiceRemovalResult = viewModel.invoiceRemovalResult.collectAsState()
 
     val invoiceItems = remember(invoice) { invoice.items }
-    val topBarTitleValue = remember(invoice) {
-        "Faturë ${invoice.header?.invoiceOrderNumber?.toInt()}"
+    val topBarTitleValue =
+        remember(invoice) { "Faturë ${invoice.header?.invoiceOrderNumber?.toInt()}" }
+
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
+
+    LaunchedEffect(invoiceRemovalResult.value) {
+        when (invoiceRemovalResult.value) {
+            is InvoiceRemovalResult.Initial -> {}
+            is InvoiceRemovalResult.Success -> {
+                navigateBackToHome()
+            }
+            is InvoiceRemovalResult.Failure -> {
+                val error = (invoiceRemovalResult.value as InvoiceRemovalResult.Failure).error
+                scope.launch { snackbarHostState.showSnackbar(error) }
+            }
+            else -> {}
+        }
     }
 
-    val viewModel = getViewModel<DetailViewModel>()
+    LaunchedEffect(invoiceSavingResult.value) {
+        when (invoiceSavingResult.value) {
+            is InvoiceSavingResult.Initial -> {}
+            is InvoiceSavingResult.Success -> {
+                navigateBackToHome()
+            }
+            is InvoiceSavingResult.Failure -> {
+                val error = (invoiceSavingResult.value as InvoiceSavingResult.Failure).error
+                scope.launch { snackbarHostState.showSnackbar(error) }
+            }
+        }
+    }
 
     BackHandler(
         enabled = true,
@@ -57,6 +89,7 @@ fun DetailScreen(
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             CenterAlignedTopAppBar(
                 colors = topAppBarColors(MaterialTheme.colorScheme.primaryContainer),
