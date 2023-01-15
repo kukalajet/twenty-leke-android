@@ -20,9 +20,7 @@ object TwentyLekeDestinations {
 class TwentyLekeNavigationActions(navController: NavHostController) {
     val navigateToHome: () -> Unit = {
         navController.navigate(TwentyLekeDestinations.HOME_ROUTE) {
-            popUpTo(navController.graph.findStartDestination().id) {
-                saveState = true
-            }
+            popUpTo(navController.graph.findStartDestination().id) { saveState = true }
             launchSingleTop = true
             restoreState = true
         }
@@ -30,9 +28,7 @@ class TwentyLekeNavigationActions(navController: NavHostController) {
 
     val navigateToScan: () -> Unit = {
         navController.navigate(TwentyLekeDestinations.SCAN_ROUTE) {
-            popUpTo(navController.graph.findStartDestination().id) {
-                saveState = true
-            }
+            popUpTo(navController.graph.findStartDestination().id) { saveState = true }
             launchSingleTop = true
             restoreState = true
         }
@@ -44,11 +40,8 @@ class TwentyLekeNavigationActions(navController: NavHostController) {
             else TwentyLekeDestinations.DETAIL_ROUTE
 
         navController.navigate(route) {
-            popUpTo(navController.graph.findStartDestination().id) {
-                saveState = true
-            }
+            popUpTo(navController.graph.findStartDestination().id) { saveState = true }
             launchSingleTop = true
-            restoreState = true
         }
     }
 }
