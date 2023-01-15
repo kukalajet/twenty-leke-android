@@ -36,7 +36,7 @@ fun ExtendableFloatingActionButton(
             icon()
 
             AnimatedVisibility(visible = extended) {
-                Row(modifier = Modifier.padding(start = 4.dp, end = 8.dp)) {
+                Row(modifier = Modifier.padding(horizontal = 4.dp)) {
                     text()
                 }
             }
