@@ -1,5 +1,6 @@
 package com.jeton.twentyleke.core.data.persistance.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.jeton.twentyleke.core.data.model.Invoice
 import com.jeton.twentyleke.core.data.model.entity.HeaderEntity
@@ -13,7 +14,7 @@ import kotlinx.coroutines.withContext
 interface InvoiceDao {
 
     @Query("SELECT * FROM header")
-    suspend fun getAllInvoices(): List<Invoice>
+    fun getAllInvoices(): LiveData<List<Invoice>>
 
     @Query("SELECT * FROM header WHERE invoiceId = :invoiceId")
     suspend fun getInvoiceById(invoiceId: Long): Invoice

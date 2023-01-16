@@ -21,10 +21,19 @@ class HomeViewModel(
     }
 
     private fun getAllInvoices() {
-        viewModelScope.launch {
-            _allInvoicesResult.emit(AllInvoicesResult.Initial)
-            val invoices = invoiceCheckRepository.getAllInvoicesFromDB()
-            _allInvoicesResult.emit(AllInvoicesResult.Success(invoices))
+        viewModelScope.launch { _allInvoicesResult.emit(AllInvoicesResult.Initial) }
+
+        val invoices = invoiceCheckRepository.getAllInvoicesFromDB()
+        invoices.observeForever {
+            it?.let {
+                viewModelScope.launch { _allInvoicesResult.emit(AllInvoicesResult.Success(it)) }
+            } ?: run {
+                viewModelScope.launch {
+                    _allInvoicesResult.emit(
+                        AllInvoicesResult.Failure("Couldn't retrieve stored invoices.")
+                    )
+                }
+            }
         }
     }
 }

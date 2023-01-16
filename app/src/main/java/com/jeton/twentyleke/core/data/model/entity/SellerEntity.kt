@@ -6,8 +6,8 @@ import com.jeton.twentyleke.core.data.model.adapter.IdType
 
 @Entity(tableName = "Seller")
 data class SellerEntity(
-    @PrimaryKey val idNum: String,
-    val invoiceId: Long,
+    val idNum: String,
+    @PrimaryKey val invoiceId: Long,
     val idType: IdType?,
     val name: String?,
     val address: String?,

@@ -1,6 +1,7 @@
 package com.jeton.twentyleke.core.repository
 
 import android.content.SharedPreferences
+import androidx.lifecycle.LiveData
 import com.jeton.twentyleke.core.data.model.Invoice
 import com.jeton.twentyleke.core.data.model.dto.InvoiceDTO
 import com.jeton.twentyleke.core.data.network.service.InvoiceCheckClient
@@ -34,9 +35,10 @@ class InvoiceCheckRepository(
 
     suspend fun deleteInvoice(invoice: Invoice) = invoiceDao.deleteInvoice(invoice)
 
-    suspend fun getAllInvoicesFromDB(): List<Invoice> = invoiceDao.getAllInvoices()
+    fun getAllInvoicesFromDB(): LiveData<List<Invoice>> = invoiceDao.getAllInvoices()
 
-    suspend fun getInvoiceByIdFromDB(invoiceId: Long): Invoice = invoiceDao.getInvoiceById(invoiceId)
+    suspend fun getInvoiceByIdFromDB(invoiceId: Long): Invoice =
+        invoiceDao.getInvoiceById(invoiceId)
 
     private fun cacheInvoice(invoice: Invoice?) {
         val moshi = Moshi.Builder().build()
