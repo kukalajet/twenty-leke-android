@@ -1,9 +1,6 @@
 package com.jeton.twentyleke.feature.detail.view
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,13 +18,15 @@ import com.jeton.twentyleke.core.ui.theme.TwentyLekeTheme
 fun InvoiceItem(item: ItemEntity) {
     val name = remember(item) { item.name }
     val quantity = remember(item) { item.quantity }
-    val priceAfterVat = remember(item) { item.priceAfterVat }
+    val priceAfterVat = remember(item) { item.priceAfterVat?.toInt() }
 
     Row(
-        Modifier.padding(PaddingValues(start = 16.dp, end = 24.dp, top = 16.dp, bottom = 16.dp)),
+        Modifier
+            .padding(PaddingValues(horizontal = 16.dp, vertical = 8.dp))
+            .fillMaxWidth(1f),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Column(modifier = Modifier.weight(2f)) {
+        Column(modifier = Modifier.weight(1f)) {
             name?.let {
                 Text(
                     text = name,
@@ -41,8 +40,9 @@ fun InvoiceItem(item: ItemEntity) {
                 text = "x $quantity",
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.onSurface
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.padding(start = 4.dp)
             )
         }
         Text(

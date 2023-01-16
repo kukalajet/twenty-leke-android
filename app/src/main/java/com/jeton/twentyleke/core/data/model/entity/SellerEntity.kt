@@ -20,8 +20,8 @@ data class SellerEntity(
                 invoiceId = invoiceId,
                 idType = IdType.NUIS,
                 idNum = "K91312511U",
-                name = "EcoMarket Food",
-                address = "Rruga Fortuzi",
+                name = "EcoMarket Food 12312312312312312312213213213213212131231231231232131212321 12312312312312312312213213213213212131231231231232131212321",
+                address = "Rruga Fortuzi Rruga Fortuzi Rruga Fortuzi Rruga Fortuzi Rruga Fortuzi Rruga Fortuzi",
                 town = "Tirane",
                 country = "ALB",
             )

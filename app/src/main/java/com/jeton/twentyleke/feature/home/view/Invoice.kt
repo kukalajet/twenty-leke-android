@@ -27,7 +27,7 @@ fun Invoice(invoice: Invoice, onPress: () -> Unit = {}) {
         try {
             val dateTimeCreated = invoice.header?.getLocalDateTimeCreated()
             val hour = dateTimeCreated?.hour
-            val minute = dateTimeCreated?.minute
+            val minute = dateTimeCreated?.minute.toString().padStart(2, '0')
 
             return@remember "$hour:$minute"
         } catch (e: Exception) {
@@ -46,7 +46,10 @@ fun Invoice(invoice: Invoice, onPress: () -> Unit = {}) {
                 .fillMaxWidth(1f),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Column(verticalArrangement = Arrangement.SpaceBetween) {
+            Column(
+                verticalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.weight(1f)
+            ) {
                 sellerName?.let {
                     Text(
                         sellerName,
@@ -68,14 +71,15 @@ fun Invoice(invoice: Invoice, onPress: () -> Unit = {}) {
             }
             Column(
                 horizontalAlignment = Alignment.End,
-                verticalArrangement = Arrangement.SpaceBetween
+                verticalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.padding(start = 8.dp)
             ) {
                 time?.let {
                     Text(
                         time,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        style = MaterialTheme.typography.labelSmall,
+                        style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                 }
@@ -84,7 +88,7 @@ fun Invoice(invoice: Invoice, onPress: () -> Unit = {}) {
                         totalPrice,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        style = MaterialTheme.typography.titleMedium,
+                        style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                 }

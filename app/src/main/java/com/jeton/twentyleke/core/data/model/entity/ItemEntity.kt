@@ -24,7 +24,7 @@ data class ItemEntity(
                 ItemEntity(
                     itemId = 1527326185,
                     invoiceId = invoiceId,
-                    name = "COCA COLA 900 ML (6)",
+                    name = "COCA COLA 900 ML (6) COCA COLA 900 ML (6) COCA COLA 900 ML (6) COCA COLA 900 ML (6)",
                     code = "1",
                     unit = "cope",
                     quantity = 1.0,

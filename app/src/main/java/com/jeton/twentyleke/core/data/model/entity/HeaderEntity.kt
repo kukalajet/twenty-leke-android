@@ -40,7 +40,7 @@ data class HeaderEntity(
                 businessUnit = "ck746kz097",
                 cashRegister = "aw268av717",
                 issuerTaxNumber = "K91312511U",
-                dateTimeCreated = "2022-10-22T18:17:51.0000",
+                dateTimeCreated = "2022-10-22T18:02:51.0000",
                 fic = "92ade238-f852-4d99-a827-10cc32eef9cd",
                 invoiceType = InvoiceType.CASH,
                 invoiceNumber = "773 / 2022 / aw268av717",

@@ -1,7 +1,6 @@
 package com.jeton.twentyleke.core.ui.theme
 
 import androidx.compose.material3.Typography
-import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -11,15 +10,13 @@ import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.sp
 import com.jeton.twentyleke.R
 
-private val Montserrat = FontFamily(
-    Font(R.font.montserrat_regular),
-    Font(R.font.montserrat_medium, FontWeight.W500)
+private val Arvo = FontFamily(
+    Font(R.font.arvo_regular),
+    Font(R.font.arvo_regular, FontWeight.W500)
 )
 
-@Suppress("DEPRECATION")
-@OptIn(ExperimentalTextApi::class)
 val defaultTextStyle = TextStyle(
-    fontFamily = Montserrat,
+    fontFamily = Arvo,
     platformStyle = PlatformTextStyle(
         includeFontPadding = false
     ),

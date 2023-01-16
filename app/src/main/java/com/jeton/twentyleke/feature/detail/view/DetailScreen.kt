@@ -65,7 +65,6 @@ fun DetailScreen(
                 val error = (invoiceRemovalResult.value as InvoiceRemovalResult.Failure).error
                 scope.launch { snackbarHostState.showSnackbar(error) }
             }
-            else -> {}
         }
     }
 
@@ -219,7 +218,8 @@ fun TimeSection(dateTime: LocalDateTime) {
         maxLines = 1,
         overflow = TextOverflow.Ellipsis,
         style = MaterialTheme.typography.bodySmall,
-        color = MaterialTheme.colorScheme.onPrimaryContainer
+        color = MaterialTheme.colorScheme.onPrimaryContainer,
+        modifier = Modifier.padding(bottom = 2.dp)
     )
 }
 
@@ -241,7 +241,7 @@ fun PriceSection(totalPrice: Double?, totalPriceWithoutVAT: Double?, totalVATAmo
         "Shuma e TVSH-së: $formattedTotalVATAmount Lekë"
     }
 
-    Column {
+    Column(Modifier.padding(vertical = 2.dp)) {
         if (totalPrice != null) Text(
             text = formattedTotalPrice,
             maxLines = 1,
@@ -283,19 +283,17 @@ fun SellerSection(seller: SellerEntity) {
         value
     }
 
-    Column {
+    Column(Modifier.padding(vertical = 2.dp)) {
         if (name != null) Text(
             text = name,
-            maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onPrimaryContainer
         )
         if (address != null) Text(
             text = address,
-            maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.bodyLarge,
+            style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onPrimaryContainer
         )
     }
@@ -320,7 +318,7 @@ fun InvoiceSignSection(invoiceOrderNumber: Double?, year: Int?, cashRegister: St
             text = sign,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onPrimaryContainer
         )
     }
@@ -377,7 +375,7 @@ fun ProcessInvoiceButton(
                 text = title,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.titleMedium,
+                style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onPrimary,
             )
         }
