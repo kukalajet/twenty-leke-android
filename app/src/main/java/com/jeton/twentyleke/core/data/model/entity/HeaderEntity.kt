@@ -3,7 +3,9 @@ package com.jeton.twentyleke.core.data.model.entity
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.jeton.twentyleke.core.data.model.adapter.InvoiceType
+import java.time.Instant
 import java.time.LocalDateTime
+import java.util.*
 
 @Entity(tableName = "Header")
 data class HeaderEntity(
@@ -14,7 +16,7 @@ data class HeaderEntity(
     val businessUnit: String?,
     val cashRegister: String?,
     val issuerTaxNumber: String?,
-    val dateTimeCreated: String?,
+    val dateTimeCreated: Long?,
     val fic: String?,
     val invoiceType: InvoiceType?,
     val invoiceNumber: String?,
@@ -26,8 +28,10 @@ data class HeaderEntity(
 ) {
 
     fun getLocalDateTimeCreated(): LocalDateTime {
-        val value = dateTimeCreated?.substring(0, dateTimeCreated.length - 5)
-        return LocalDateTime.parse(value)
+        return LocalDateTime.ofInstant(
+            Instant.ofEpochMilli(dateTimeCreated!!),
+            TimeZone.getDefault().toZoneId()
+        )
     }
 
     companion object {
@@ -40,7 +44,7 @@ data class HeaderEntity(
                 businessUnit = "ck746kz097",
                 cashRegister = "aw268av717",
                 issuerTaxNumber = "K91312511U",
-                dateTimeCreated = "2022-10-22T18:02:51.0000",
+                dateTimeCreated = 1673909570493,
                 fic = "92ade238-f852-4d99-a827-10cc32eef9cd",
                 invoiceType = InvoiceType.CASH,
                 invoiceNumber = "773 / 2022 / aw268av717",

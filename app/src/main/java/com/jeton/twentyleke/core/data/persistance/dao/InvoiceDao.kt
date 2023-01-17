@@ -13,7 +13,7 @@ import kotlinx.coroutines.withContext
 @Dao
 interface InvoiceDao {
 
-    @Query("SELECT * FROM header")
+    @Query("SELECT * FROM header ORDER BY header.dateTimeCreated DESC")
     fun getAllInvoices(): LiveData<List<Invoice>>
 
     @Query("SELECT * FROM header WHERE invoiceId = :invoiceId")

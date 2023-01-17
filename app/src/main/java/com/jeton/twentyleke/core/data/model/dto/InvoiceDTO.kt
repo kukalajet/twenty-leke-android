@@ -6,6 +6,8 @@ import com.jeton.twentyleke.core.data.model.entity.HeaderEntity
 import com.jeton.twentyleke.core.data.model.entity.ItemEntity
 import com.jeton.twentyleke.core.data.model.entity.PaymentMethodEntity
 import com.squareup.moshi.Json
+import java.time.LocalDateTime
+import java.time.ZoneId
 
 data class InvoiceDTO(
     @Json(name = "id") val id: Long?,
@@ -32,7 +34,7 @@ data class InvoiceDTO(
         val header = getHeaderEntity()
         val seller = seller?.toEntity(header.invoiceId!!)
         val items = getItemEntities(header.invoiceId!!)
-        val paymentMethods = getPaymentMethodEntities(header.invoiceId!!)
+        val paymentMethods = getPaymentMethodEntities(header.invoiceId)
         return Invoice(
             header = header,
             seller = seller,
@@ -42,6 +44,11 @@ data class InvoiceDTO(
     }
 
     private fun getHeaderEntity(): HeaderEntity {
+        // TODO: Temp implementation, must find something better.
+        val formatted = dateTimeCreated?.substring(0, dateTimeCreated.length - 5)
+        val date = LocalDateTime.parse(formatted)
+        val timestamp = date.toMillis()
+
         return HeaderEntity(
             id,
             iic,
@@ -50,7 +57,7 @@ data class InvoiceDTO(
             businessUnit,
             cashRegister,
             issuerTaxNumber,
-            dateTimeCreated,
+            timestamp,
             fic,
             invoiceType,
             invoiceNumber,
@@ -70,3 +77,6 @@ data class InvoiceDTO(
         return items?.map { it.toEntity(invoiceId) }
     }
 }
+
+fun LocalDateTime.toMillis(zone: ZoneId = ZoneId.systemDefault()) =
+    atZone(zone)?.toInstant()?.toEpochMilli()
